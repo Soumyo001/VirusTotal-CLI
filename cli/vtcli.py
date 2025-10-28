@@ -4,7 +4,7 @@ from data.constants import BANNER
 from utils.helpers.key_helper import save_api_key, load_api_key, remove_api_key, display_api_key
 from utils.helpers.hash import compute_hashes
 from utils.helpers.url_to_vt_id_helper import url_to_vt_id
-from utils.helpers.print_helper import print_response
+from utils.helpers.printer_helper.print_file_helper import print_file_response
 from utils.validators.url_validator import validate_url
 from api.api_client import VirusTotalClient
 
@@ -137,24 +137,24 @@ class VTCLI:
             if args.action == "scan":
                 # print(f"file scan command: {args.path} {args.json}")
                 response = vt.scan_file(args.path)
-                print_response(response, args.json)
+                print_file_response(response, args.json)
             elif args.action == "hash":
                 hashes = compute_hashes(args.path)
                 print(f"SHA-256: {hashes["SHA256"]}\nMD5: {hashes["MD5"]}\nSHA-1: {hashes["SHA1"]}")
             elif args.action == "report":
                 # print(f"file scan report: {args.hash} {args.json}")
                 response = vt.get_file_report(args.hash)
-                print_response(response, args.json)
+                print_file_response(response, args.json)
             elif args.action == "rescan":
                 # print(f"file rescan: {args.hash} {args.json}")
                 response = vt.request_rescan(args.hash)
-                print_response(response, args.json)
+                print_file_response(response, args.json)
 
         elif args.command == "url":
             if args.action == "scan":
                 # print(f"url scan command: {args.url} {args.json}")
                 response = vt.scan_url(args.url)
-                print_response(response, args.json, is_url=True)
+                print_file_response(response, args.json, is_url=True)
             elif args.action == "report":
                 source = args.id_or_url
                 if validate_url(source):
@@ -163,7 +163,7 @@ class VTCLI:
                 else: vt_id = source
                 # print(f"url scan report: {vt_id} {args.json}")
                 response = vt.get_url_report(vt_id)
-                print_response(response, args.json, is_url=True)
+                print_file_response(response, args.json, is_url=True)
 
         elif args.command == "domain":
             print(f"domain command: {args.domain_name} {args.json}")
@@ -180,6 +180,6 @@ class VTCLI:
         elif args.command == "analysis":
             # print(f"analysis command: {args.id} {args.json}")
             response = vt.get_analysis(args.id)
-            print_response(response, args.json)
+            print_file_response(response, args.json)
 
         else: self.parser.print_help()

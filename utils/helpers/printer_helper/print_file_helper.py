@@ -6,7 +6,7 @@ import json
 
 console = Console()
 
-def print_response(data, json_output=False, is_url=False):
+def print_file_response(data, json_output=False, is_url=False):
     # If user wants raw JSON output
     if json_output:
         console.print_json(json.dumps(data))
