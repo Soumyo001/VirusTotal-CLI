@@ -25,7 +25,7 @@ class VirusTotalClient():
             return response.json()
         
         elif file_size > max_regular and file_size <= max_large:
-            response = requests.post(f"{p.BASE_URL}/files/upload_url", headers=self.headers)
+            response = requests.get(f"{p.BASE_URL}/files/upload_url", headers=self.headers)
 
             upload_info = response.json()
             upload_url = upload_info.get(fa.DATA, {})

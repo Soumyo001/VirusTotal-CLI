@@ -190,7 +190,7 @@ class VTCLI:
                 print(f"account quota {args.json}")
 
         elif args.command == "analysis":
-            print(f"analysis command: {args.id} {args.json} {args.action}")
+            # print(f"analysis command: {args.id} {args.json} {args.action}")
             response = vt.get_analysis(args.id)
             if args.action == "file":
                 print_file_details(response, args.json)
