@@ -1,6 +1,6 @@
 import argparse, sys
 from data.api_constants import Paths as p
-from data.constants import BANNER, HELP_MENU
+from data.constants import BANNER
 from utils.helpers.key_helper import save_api_key, load_api_key, remove_api_key, display_api_key
 from utils.validators.url_validator import validate_url
 from utils.helpers.url_to_vt_id_helper import url_to_vt_id
