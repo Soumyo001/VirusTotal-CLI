@@ -1,5 +1,4 @@
 # ---------- url report (previously scanned data) ----------------
-
 {
   "data": {
     "id": "114fb86b9b4e868f8bac2249eb5c444b545f0240c3dadd23312a0bc1622b5488",
@@ -8,51 +7,6 @@
       "self": "https://www.virustotal.com/api/v3/urls/114fb86b9b4e868f8bac2249eb5c444b545f0240c3dadd23312a0bc1622b5488"
     },
     "attributes": {
-      "html_meta": {
-        "viewport": [
-          "width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"
-        ],
-        "robots": [
-          "noindex, nofollow"
-        ]
-      },
-      "last_modification_date": 1761672476,
-      "last_submission_date": 1761672443,
-      "tld": "com",
-      "last_http_response_headers": {
-        "Vary": "Accept-Encoding",
-        "Content-Encoding": "br",
-        "Set-Cookie": "datr=_fwAacp2L1qBGcyvfOsgcIjo; expires=Wed, 02-Dec-2026 17:27:25 GMT; Max-Age=34560000; path=/; domain=.facebook.com; secure; httponly; SameSite=None, sb=_fwAaQTIX_4BRFEskybTBpm8; expires=Wed, 02-Dec-2026 17:27:25 GMT; Max-Age=34560000; path=/; domain=.facebook.com; secure; httponly; SameSite=None",
-        "cross-origin-embedder-policy-report-only": "require-corp;report-to=\"coep_report\"",
-        "Pragma": "no-cache",
-        "Cache-Control": "private, no-cache, no-store, must-revalidate",
-        "Expires": "Sat, 01 Jan 2000 00:00:00 GMT",
-        "content-security-policy": "default-src blob: 'self' https://*.fbsbx.com *.facebook.com *.fbcdn.net;script-src *.facebook.com *.fbcdn.net *.facebook.net 127.0.0.1:* 'nonce-1DZbGnbr' blob: 'self' connect.facebook.net 'unsafe-eval' https://*.google-analytics.com *.google.com;style-src *.fbcdn.net data: *.facebook.com 'unsafe-inline' https://fonts.googleapis.com;connect-src *.facebook.com facebook.com *.fbcdn.net *.facebook.net wss://*.facebook.com:* wss://*.whatsapp.com:* wss://*.fbcdn.net attachment.fbsbx.com ws://localhost:* blob: *.cdninstagram.com 'self' http://localhost:3103 wss://gateway.facebook.com wss://edge-chat.facebook.com wss://snaptu-d.facebook.com wss://kaios-d.facebook.com/ v.whatsapp.net *.fbsbx.com *.fb.com https://*.google-analytics.com;font-src data: *.facebook.com *.fbcdn.net *.fbsbx.com https://fonts.gstatic.com;img-src *.fbcdn.net *.facebook.com data: https://*.fbsbx.com facebook.com *.cdninstagram.com fbsbx.com fbcdn.net connect.facebook.net *.carriersignal.info blob: android-webview-video-poster: *.whatsapp.net *.fb.com *.oculuscdn.com *.tenor.co *.tenor.com *.giphy.com https://trustly.one/ https://*.trustly.one/ https://paywithmybank.com/ https://*.paywithmybank.com/ https://www.googleadservices.com https://googleads.g.doubleclick.net https://*.google-analytics.com;media-src *.cdninstagram.com blob: *.fbcdn.net *.fbsbx.com www.facebook.com *.facebook.com data: *.tenor.co *.tenor.com https://*.giphy.com;child-src data: blob: 'self' https://*.fbsbx.com *.facebook.com *.fbcdn.net;frame-src *.facebook.com *.fbsbx.com fbsbx.com data: www.instagram.com *.fbcdn.net accounts.meta.com *.accounts.meta.com https://trustly.one/ https://*.trustly.one/ https://paywithmybank.com/ https://*.paywithmybank.com/ https://www.googleadservices.com https://googleads.g.doubleclick.net https://www.google.com https://td.doubleclick.net *.google.com *.doubleclick.net;manifest-src data: blob: 'self' https://*.fbsbx.com *.facebook.com *.fbcdn.net;object-src data: blob: 'self' https://*.fbsbx.com *.facebook.com *.fbcdn.net;worker-src blob: *.facebook.com data:;",
-        "document-policy": "include-js-call-stacks-in-crash-reports",
-        "X-Frame-Options": "DENY",
-        "X-Content-Type-Options": "nosniff",
-        "X-XSS-Protection": "0",
-        "reporting-endpoints": "coop_report=\"https://www.facebook.com/browser_reporting/coop/?minimize=0\", coep_report=\"https://www.facebook.com/browser_reporting/coep/?minimize=0\", default=\"https://m.facebook.com/ajax/weblite_error_reports/?brsid=7566325537545620922&cpp=C3&cv=1029037448&st=1761672445920\"",
-        "report-to": "{\"max_age\":2592000,\"endpoints\":[{\"url\":\"https:\\/\\/www.facebook.com\\/browser_reporting\\/coop\\/?minimize=0\"}],\"group\":\"coop_report\",\"include_subdomains\":true}, {\"max_age\":86400,\"endpoints\":[{\"url\":\"https:\\/\\/www.facebook.com\\/browser_reporting\\/coep\\/?minimize=0\"}],\"group\":\"coep_report\"}, {\"max_age\":259200,\"endpoints\":[{\"url\":\"https:\\/\\/m.facebook.com\\/ajax\\/weblite_error_reports\\/?brsid=7566325537545620922&cpp=C3&cv=1029037448&st=1761672445920\"}]}",
-        "cross-origin-opener-policy": "same-origin-allow-popups",
-        "origin-agent-cluster": "?1",
-        "accept-ch-lifetime": "4838400",
-        "accept-ch": "viewport-width,dpr,Sec-CH-Prefers-Color-Scheme,Sec-CH-UA-Full-Version-List,Sec-CH-UA-Platform-Version,Sec-CH-UA-Model",
-        "Content-Type": "text/html; charset=utf-8",
-        "Strict-Transport-Security": "max-age=15552000; preload; includeSubDomains",
-        "X-FB-Debug": "VGPjpeuzWrqFEIXQxxbPf3vdbwnVg4HElOpPsUwpn3EXV6wIoUKaBTA0jCWDiSdKXuTePc12GBnpV28SzWzT3w==",
-        "Date": "Tue, 28 Oct 2025 17:27:25 GMT",
-        "Proxy-Status": "http_request_error; e_fb_vipaddr=\"AcODsSI-5Y9NuVvMaXvPw9DZ5FLCHL13J6686BHeG4VjVHcClRX1DwKbaLOVmhpRgH9dvN9b0mLYmKSolp_1tUTxxiyxlWGO5G0\"; e_clientaddr=\"AcNqEQO5vCxPmQbmDUOUZByE6FUbFZZDPoITmVr8z3Lq-k_xFIsoKQL76SJk9LZRbXuffobaHJcPxMlCWk3lokP0mzBvhhsL1mV0KiSnV_oQh55K\"; e_upip=\"AcOEsdP8k9Auq97WT7Ku8Q4hgAgqVVJ_zZEiTbehYne7QrMmLZw1GB2YWwg7LWy2cbvJAnCslwd7MGFHyzLbjmH0tHlXU21o3lnVZQZ30w\"; e_fb_zone=\"AcP4ZPFVSfF74zmmFZb__6WLT-R7hdROmPqITykZ-HK1TRFBNxKcFECa5gM5izmp\"; e_fb_twtaskhandle=\"AcP03rzqgJdlQXaaWM22WncqLhG7juTDfEKSfOZywqcTYLmEJ4fhJHHQLrHA8pLQFqT5W0Y2fYY7Yp57etymKo-5c5xP7IFQgAftjH_XISTLlb0\"; e_proxy=\"AcMdn1irMON8aUF5ixskq7ranYcQdek-btmh70nr0eHl4eqoaYKka-BY9RAX-Ugyi-v1kzo1gVnp9gkYHEIA\", http_request_error; e_fb_vipaddr=\"AcNeBNjfNT2KlgLU2b7t2PebLjJFXYzUu1ljZSy-KDpeHgFS-YHYLWnTb_uLcoWMVPiuK759\"; e_clientaddr=\"AcMX8FFqvSS0rxh4NHXOoVDN5-nRHtT-ejLLpYLGJn6x76z7-VIP86Ps4oF3nVP0RZ24_EIGxct7XCBPO8s\"; e_upip=\"AcOW7qF3HxY1tv5-j7HwQ8lypIBWGn1iLHoawiSC_TmjQLrFfouvhiWm5PM_kkGxLWNSt87X9zD6uS11NfaxMoPpIyz3dvf2C5c\"; e_fb_zone=\"AcPxKzJnGQgYRQG5wmM3u27zzFFLeLhj_3ymcmMJg6EilLlwTiju0qVcd4HOVA\"; e_fb_twtaskhandle=\"AcMO6JyQ0Xk92GSIBBHThY73r4nib6M_WsjxVVpcA-F7dR6gQfrMN5ENw35KLF39LWE8AG2z5HhgrJ_xEXz4auSuFy4iiSnY1s4\"; e_proxy=\"AcPVSqzknUfBikFVFx0ZK3gn9pkOgtlg9C_mYOfMo6SMHobPqneOK25lxSQFL_KiiHa2FBOMa7VlPtg\"",
-        "X-FB-Connection-Quality": "EXCELLENT; q=0.9, rtt=37, rtx=0, c=10, mss=1380, tbw=24410, tp=-1, tpl=-1, uplat=186, ullat=0",
-        "Alt-Svc": "h3=\":443\"; ma=86400",
-        "Connection": "keep-alive",
-        "Content-Length": "3676"
-      },
-      "tags": [
-        "password-input",
-        "trackers",
-        "external-resources"
-      ],
       "first_submission_date": 1281464168,
       "last_analysis_stats": {
         "malicious": 0,
@@ -61,36 +15,6 @@
         "harmless": 73,
         "timeout": 0
       },
-      "last_analysis_date": 1761672443,
-      "reputation": 8,
-      "total_votes": {
-        "harmless": 908,
-        "malicious": 746
-      },
-      "categories": {
-        "alphaMountain.ai": "Social Networking (alphaMountain.ai)",
-        "BitDefender": "socialnetworks",
-        "Dr.Web": "social networks",
-        "Sophos": "social networks",
-        "Forcepoint ThreatSeeker": "social web - facebook"
-      },
-      "last_http_response_code": 400,
-      "redirection_chain": [
-        "http://www.facebook.com/",
-        "https://www.facebook.com/"
-      ],
-      "url": "http://www.facebook.com/",
-      "trackers": {
-        "Doubleclick": [
-          {
-            "url": "",
-            "id": "",
-            "timestamp": 1761672443
-          }
-        ]
-      },
-      "last_final_url": "https://m.facebook.com/?_rdr",
-      "last_http_response_content_length": 3676,
       "last_analysis_results": {
         "Artists Against 419": {
           "method": "blacklist",
@@ -121,26 +45,48 @@
           "engine_name": "Lionic",
           "category": "harmless",
           "result": "clean"
-        },
-        "Criminal IP": {
-          "method": "blacklist",
-          "engine_name": "Criminal IP",
-          "category": "harmless",
-          "result": "clean"
-        },
-        "AILabs (MONITORAPP)": {
-          "method": "blacklist",
-          "engine_name": "AILabs (MONITORAPP)",
-          "category": "harmless",
-          "result": "clean"
-        },
-        "AlienVault": {
-          "method": "blacklist",
-          "engine_name": "AlienVault",
-          "category": "harmless",
-          "result": "clean"
-        },
-        ...... other engines
+        }
+      },
+      "last_modification_date": 1761682526,
+      "last_final_url": "https://www.facebook.com/",
+      "tld": "com",
+      "redirection_chain": [
+        "http://www.facebook.com/"
+      ],
+      "categories": {
+        "alphaMountain.ai": "Social Networking (alphaMountain.ai)",
+        "BitDefender": "socialnetworks",
+        "Dr.Web": "social networks",
+        "Sophos": "social networks",
+        "Forcepoint ThreatSeeker": "social web - facebook"
+      },
+      "last_http_response_code": 200,
+      "last_submission_date": 1761682067,
+      "html_meta": {
+        "referrer": [
+          "origin-when-crossorigin"
+        ],
+        "bingbot": [
+          "noarchive"
+        ],
+        "google": [
+          "notranslate"
+        ],
+        "og:site_name": [
+          "Facebook"
+        ],
+        "og:url": [
+          "https://www.facebook.com/"
+        ],
+        "og:image": [
+          "https://www.facebook.com/images/fb_icon_325x325.png"
+        ],
+        "og:locale": [
+          "en_US"
+        ],
+        "description": [
+          "Log into Facebook to start sharing and connecting with your friends, family, and people you know."
+        ]
       },
       "crowdsourced_context": [
         {
@@ -151,13 +97,110 @@
           "title": "Palebot Trojan Harvests Palestinian Online Credentials"
         }
       ],
+      "last_http_response_content_sha256": "961690643dd6179cfbf84af5d6c5cb55b938955818a4b83c59266131fa223a63",
+      "tags": [
+        "trackers",
+        "external-resources",
+        "password-input"
+      ],
       "threat_names": [],
-      "times_submitted": 211907,
-      "title": "Error Facebook",
-      "last_http_response_content_sha256": "0f779371a186f49e9d9fea26eb1c570e5ae20d590139239b6ec186de868a6e75",
-      "last_http_response_cookies": {
-        "datr": "_fwAacp2L1qBGcyvfOsgcIjo",
-        "sb": "_fwAaQTIX_4BRFEskybTBpm8"
+      "last_http_response_headers": {
+        "origin-agent-cluster": "?1",
+        "reporting-endpoints": "coop_report=\"https://www.facebook.com/browser_reporting/coop/?minimize=0\", default=\"https://www.facebook.com/ajax/browser_error_reports/?device_level=unknown&brsid=7566368770997191660&cpp=C3&cv=1029037448&st=1761682511047\", permissions_policy=\"https://www.facebook.com/ajax/browser_error_reports/\"",
+        "x-fb-debug": "8F369x94Ay7mzvGL8uP76fACAmh890I99YT9kJ+/uqVc11CAc1BlL/Sjx6+gIfE3/snniUNa88f0iXOmwc+Ekw==",
+        "alt-svc": "h3=\":443\"; ma=86400",
+        "cache-control": "private, no-cache, no-store, must-revalidate",
+        "content-security-policy": "default-src blob: 'self' https://*.fbsbx.com *.facebook.com *.fbcdn.net;script-src *.facebook.com *.fbcdn.net *.facebook.net 127.0.0.1:* 'nonce-yrvaJYG4' blob: 'self' connect.facebook.net 'wasm-unsafe-eval' https://*.google-analytics.com *.google.com;style-src *.fbcdn.net data: *.facebook.com 'unsafe-inline' https://fonts.googleapis.com;connect-src *.facebook.com facebook.com *.fbcdn.net *.facebook.net wss://*.facebook.com:* wss://*.whatsapp.com:* wss://*.fbcdn.net attachment.fbsbx.com ws://localhost:* blob: *.cdninstagram.com 'self' http://localhost:3103 wss://gateway.facebook.com wss://edge-chat.facebook.com wss://snaptu-d.facebook.com wss://kaios-d.facebook.com/ v.whatsapp.net *.fbsbx.com *.fb.com https://*.google-analytics.com;font-src data: *.facebook.com *.fbcdn.net *.fbsbx.com https://fonts.gstatic.com;img-src *.fbcdn.net *.facebook.com data: https://*.fbsbx.com facebook.com *.cdninstagram.com fbsbx.com fbcdn.net connect.facebook.net *.carriersignal.info blob: android-webview-video-poster: *.whatsapp.n",
+        "expires": "Sat, 01 Jan 2000 00:00:00 GMT",
+        "report-to": "{\"max_age\":2592000,\"endpoints\":[{\"url\":\"https:\\/\\/www.facebook.com\\/browser_reporting\\/coop\\/?minimize=0\"}],\"group\":\"coop_report\",\"include_subdomains\":true}, {\"max_age\":259200,\"endpoints\":[{\"url\":\"https:\\/\\/www.facebook.com\\/ajax\\/browser_error_reports\\/?device_level=unknown&brsid=7566368770997191660&cpp=C3&cv=1029037448&st=1761682511047\"}]}, {\"max_age\":21600,\"endpoints\":[{\"url\":\"https:\\/\\/www.facebook.com\\/ajax\\/browser_error_reports\\/\"}],\"group\":\"permissions_policy\"}",
+        "strict-transport-security": "max-age=15552000; preload",
+        "x-fb-connection-quality": "EXCELLENT; q=0.9, rtt=11, rtx=0, c=10, mss=1380, tbw=4565, tp=-1, tpl=-1, uplat=198, ullat=0",
+        "content-encoding": "zstd",
+        "content-type": "text/html; charset=\"utf-8\"",
+        "cross-origin-opener-policy": "unsafe-none",
+        "cross-origin-resource-policy": "same-origin",
+        "date": "Tue, 28 Oct 2025 20:15:11 GMT",
+        "document-policy": "force-load-at-top\ninclude-js-call-stacks-in-crash-reports",
+        "pragma": "no-cache",
+        "vary": "Accept-Encoding",
+        "permissions-policy": "accelerometer=(), attribution-reporting=(self), autoplay=(), bluetooth=(), browsing-topics=(self), camera=(self), ch-device-memory=(), ch-downlink=(), ch-dpr=(), ch-ect=(), ch-rtt=(), ch-save-data=(), ch-ua-arch=(), ch-ua-bitness=(), ch-viewport-height=(), ch-viewport-width=(), ch-width=(), clipboard-read=(self), clipboard-write=(self), compute-pressure=(), display-capture=(self), encrypted-media=(self), fullscreen=(self), gamepad=*, geolocation=(self), gyroscope=(), hid=(), idle-detection=(), interest-cohort=(self), keyboard-map=(), local-fonts=(), magnetometer=(), microphone=(self), midi=(), otp-credentials=(), payment=(), picture-in-picture=(self), private-state-token-issuance=(), publickey-credentials-get=(self), screen-wake-lock=(), serial=(), shared-storage=(), shared-storage-select-url=(), private-state-token-redemption=(), usb=(), unload=(self), window-management=(), xr-spatial-tracking=(self);report-to=\"permissions_policy\"",
+        "x-content-type-options": "nosniff",
+        "x-frame-options": "DENY",
+        "x-xss-protection": "0"
+      },
+      "outgoing_links": [
+        "https://es-la.facebook.com/",
+        "https://fr-fr.facebook.com/",
+        "https://zh-cn.facebook.com/",
+        "https://ar-ar.facebook.com/",
+        "https://pt-br.facebook.com/",
+        "https://it-it.facebook.com/",
+        "https://ko-kr.facebook.com/",
+        "https://de-de.facebook.com/",
+        "https://hi-in.facebook.com/",
+        "https://messenger.com/",
+        "https://about.meta.com/technologies/meta-pay",
+        "https://www.meta.com/",
+        "https://www.meta.com/quest/",
+        "https://www.meta.com/smart-glasses/",
+        "https://www.meta.ai/",
+        "https://www.meta.ai/pages/india-vs-new-zealand-cricket-series-rohit-sharma-kuldeep-yadav-glenn-phillips/?utm_source=foa_web_footer",
+        "https://l.facebook.com/l.php?u=https%3A%2F%2Fwww.instagram.com%2F&h=AT3zz0iY-Ej1A7QcA8pIM32MIzNqbrjlxHWW5k2_pn40bMSPPR_vqxL2whF6mWfDP9CemJB5MIad5-8MY8gJkUcHLdBZ79kL4h37JOrMgPEBiZD1ePcIEDZ-X1-jRdjDT3n6PgBJ9iO-8s27ghv24Qc66hY",
+        "https://www.threads.com/",
+        "https://about.meta.com/",
+        "https://developers.facebook.com/?ref=pf",
+        "https://static.xx.fbcdn.net/rsrc.php/v4/yG/r/296fn86rNq4.js",
+        "https://static.xx.fbcdn.net/rsrc.php/v4/yv/r/zENmEXS6LDf.js",
+        "https://static.xx.fbcdn.net/rsrc.php/v4i7M54/y8/l/en_US-j/1cZqghmGAiw.js",
+        "https://static.xx.fbcdn.net/rsrc.php/v4/yr/r/f3rREAo7qCr.js",
+        "https://static.xx.fbcdn.net/rsrc.php/v4/yK/r/kTI1O7WYl9j.js",
+        "https://static.xx.fbcdn.net/rsrc.php/v4/yd/r/DAbtIj8l373.js",
+        "https://static.xx.fbcdn.net/rsrc.php/v4/yF/r/o7w2FRDwEYH.js",
+        "https://static.xx.fbcdn.net/rsrc.php/v4/y8/r/7JXpRbB75hB.js",
+        "https://static.xx.fbcdn.net/rsrc.php/v4/yQ/r/g-YsvdAI4W2.js",
+        "https://static.xx.fbcdn.net/rsrc.php/v4/yW/r/rhZUiD8hJ72.js",
+        "https://static.xx.fbcdn.net/rsrc.php/v4/yX/r/R7paD7vUTA2.js",
+        "https://static.xx.fbcdn.net/rsrc.php/v4/y5/r/moIL_eBactF.js",
+        "https://static.xx.fbcdn.net/rsrc.php/v4/yh/r/qkqnWEiZRwq.js",
+        "https://static.xx.fbcdn.net/rsrc.php/v4/yl/r/6HQ9Qq2Ycil.js",
+        "https://static.xx.fbcdn.net/rsrc.php/v4/yu/r/HToljQTEDm2.js",
+        "https://static.xx.fbcdn.net/rsrc.php/v4/yZ/r/g4aTI1LcSDJ.js",
+        "https://static.xx.fbcdn.net/rsrc.php/v4/yi/r/fcnDhCsH9cT.js",
+        "https://static.xx.fbcdn.net/rsrc.php/v4/yS/r/ui2DkP-wt_7.js",
+        "https://static.xx.fbcdn.net/rsrc.php/v4/y-/r/Uiv_FeOu-th.js",
+        "https://static.xx.fbcdn.net/rsrc.php/v4/yp/r/dmjwXLb1RAd.js",
+        "https://static.xx.fbcdn.net/rsrc.php/v4/yO/r/_tJ17sGyxOX.js",
+        "https://static.xx.fbcdn.net/rsrc.php/v4ihVQ4/yS/l/en_US-j/NtVYeNijxVG.js",
+        "https://static.xx.fbcdn.net/rsrc.php/v4/yr/r/QBbk5MRV8GM.js",
+        "https://static.xx.fbcdn.net/rsrc.php/v4/yl/r/cq2OVXGg2M-.js",
+        "https://static.xx.fbcdn.net/rsrc.php/v4/yE/r/knffZclfnRJ.js",
+        "https://static.xx.fbcdn.net/rsrc.php/y1/r/4lCu2zih0ca.svg",
+        "https://facebook.com/security/hsts-pixel.gif?c=3.2.5",
+        "https://live.adyen.com",
+        "https://integration-facebook.payu.in",
+        "https://facebook.payulatam.com",
+        "https://secure.payu.com",
+        "https://facebook.dlocal.com",
+        "https://buy2.boku.com"
+      ],
+      "last_analysis_date": 1761682067,
+      "url": "http://www.facebook.com/",
+      "times_submitted": 211912,
+      "reputation": 8,
+      "total_votes": {
+        "harmless": 908,
+        "malicious": 746
+      },
+      "title": "Facebook - log in or sign up",
+      "last_http_response_content_length": 78491,
+      "trackers": {
+        "Doubleclick": [
+          {
+            "url": "",
+            "id": "",
+            "timestamp": 1761682067
+          }
+        ]
       }
     }
   }
