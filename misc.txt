@@ -8,7 +8,7 @@ vt file report 44d88612fea8a8f36de82e1278abb02f
 vt file rescan 44d88612fea8a8f36de82e1278abb02f
 
 vt url scan https://evilsite.com
-vt url report aHR0cHM6Ly9ldmlsc2l0ZS5jb20
+vt url report aHR0cHM6Ly9ldmlsc2l0ZS5jb20 --headers/--engines
 vt domain example.com
 vt ip info 8.8.8.8
 

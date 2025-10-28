@@ -25,7 +25,9 @@ def print_url_details(data, json_output=False, show_headers=False, show_engines=
         return
     if r.ERROR in data:
         err = data[r.ERROR]
-        console.print(f"[bold red]✗ Error:[/] {err.get(r.ERROR_MESSAGE, err)}")
+        console.print(f"[bold red]✗ Error:[/bold red] {err.get(r.ERROR_CODE, 'Unknown error')}")
+        if r.ERROR_MESSAGE in err:
+            console.print(f"[yellow]{err.get(r.ERROR_MESSAGE, 'Unknown error message')}[/yellow]")
         return
 
     # Extract main data
@@ -33,12 +35,19 @@ def print_url_details(data, json_output=False, show_headers=False, show_engines=
     if not isinstance(d, dict):
         console.print_json(data)
         return
+    
+    if d.get(ua.TYPE) == "analysis" and ua.ATTR not in d:
+        console.print("[yellow]🕓 File successfully submitted for analysis.[/yellow]")
+        console.print(f"[cyan]Analysis ID:[/] {d.get(ua.ID, 'N/A')}")
+        console.print("Run the following command to check the report:")
+        console.print(f"  [bold]vt analysis url {d.get(ua.ID, '')}[/bold]")
+        return
 
     attrs = d.get(ua.ATTR, {})
 
     # URL / Meta info
     original_url = attrs.get(ua.ATTR_URL, d.get(ua.ID, "N/A"))
-    final_url = attrs.get(ua.ATTR_FINAL_URL, "N/A")
+    final_url = attrs.get(ua.ATTR_FINAL_URL, original_url)
     title = attrs.get(ua.ATTR_TITLE, "N/A")
 
     # Timestamps
@@ -170,6 +179,17 @@ def print_url_details(data, json_output=False, show_headers=False, show_engines=
             color = "red" if cat == "malicious" else "yellow"
             av_table.add_row(engine, f"[{color}]{cat}[/{color}]", method, result)
         console.print(av_table)
+
+        # Display threat names if available
+        threat_names = attrs.get("threat_names", []) or []
+        if threat_names:
+            threat_panel = Panel(
+                "\n".join(threat_names),
+                title=f"Threat Names ({len(threat_names)})",
+                expand=False,
+                style="red"
+            )
+            console.print(threat_panel)
     else:
         console.print(Panel("No suspicious/malicious detections.", title="Per-Engine Highlights", expand=False))
 
@@ -230,9 +250,8 @@ def print_url_details(data, json_output=False, show_headers=False, show_engines=
 
     suggestions = (
         "[bold]Suggested commands:[/bold]\n"
-        "  --more-headers : show full HTTP response headers\n"
+        "  --headers : show full HTTP response headers\n"
         "  --engines      : show all per-engine results\n"
-        "  --export-iocs  : export IOCs (URL + content hash)\n\n"
         + ("[bold]IOCs:[/] " + ", ".join(iocs))
     )
     console.print(Panel(Align.left(suggestions), title="Actions & IOCs", expand=False))

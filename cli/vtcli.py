@@ -74,6 +74,8 @@ class VTCLI:
             help="Get URL scan report by ID (base64 form) OR pass a raw URL and it will be encoded"
         )
         url_report.add_argument("id_or_url", help="Safe Base64 encoded URL or raw")
+        url_report.add_argument("--headers", action="store_true", help="Display all the headers")
+        url_report.add_argument("--engines", action="store_true", help="Display all AV engines")
         url_report.add_argument("--json", action="store_true")
 
         # Domain related command
@@ -108,6 +110,8 @@ class VTCLI:
 
         url_analysis = analysis_sub.add_parser("url", help="Get URL analysis results")
         url_analysis.add_argument("id", help="URL Analysis ID")
+        url_analysis.add_argument("--headers", action="store_true")
+        url_analysis.add_argument("--engines", action="store_true")
         url_analysis.add_argument("--json", action="store_true")
 
         return parser
@@ -162,7 +166,7 @@ class VTCLI:
             if args.action == "scan":
                 # print(f"url scan command: {args.url} {args.json}")
                 response = vt.scan_url(args.url)
-                print_url_details(response, args.json, is_url=True)
+                print_url_details(response, json_output=args.json)
             elif args.action == "report":
                 source = args.id_or_url
                 if validate_url(source):
@@ -171,7 +175,7 @@ class VTCLI:
                 else: vt_id = source
                 # print(f"url scan report: {vt_id} {args.json}")
                 response = vt.get_url_report(vt_id)
-                print_url_details(response, args.json, is_url=True)
+                print_url_details(response, json_output=args.json, show_headers=args.headers, show_engines=args.engines)
 
         elif args.command == "domain":
             print(f"domain command: {args.domain_name} {args.json}")
@@ -191,6 +195,6 @@ class VTCLI:
             if args.action == "file":
                 print_file_details(response, args.json)
             elif args.action == "url":
-                print_url_details(response, args.json)
+                print_url_details(response, json_output=args.json, show_headers=args.headers, show_engines=args.engines)
 
         else: self.parser.print_help()

@@ -29,7 +29,7 @@ def print_file_details(data, json_output=False):
             console.print("[yellow]🕓 File successfully submitted for analysis.[/yellow]")
             console.print(f"[cyan]Analysis ID:[/] {d.get(fa.ID, 'N/A')}")
             console.print("Run the following command to check the report:")
-            console.print(f"  [bold]vt analysis {d.get(fa.ID, '')}[/bold]")
+            console.print(f"  [bold]vt analysis file {d.get(fa.ID, '')}[/bold]")
             return
 
         # Case 2: Completed analysis (has attributes/stats)
