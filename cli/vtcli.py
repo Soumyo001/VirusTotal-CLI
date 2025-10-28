@@ -2,8 +2,11 @@ import argparse, sys
 from data.api_constants import Paths as p
 from data.constants import BANNER
 from utils.helpers.key_helper import save_api_key, load_api_key, remove_api_key, display_api_key
-from utils.validators.url_validator import validate_url
+from utils.helpers.hash import compute_hashes
 from utils.helpers.url_to_vt_id_helper import url_to_vt_id
+from utils.helpers.print_helper import print_response
+from utils.validators.url_validator import validate_url
+from api.api_client import VirusTotalClient
 
 class VTCLI:
     def __init__(self):
@@ -40,6 +43,10 @@ class VTCLI:
         file_scan = file_sub.add_parser("scan", help="Scan a file")
         file_scan.add_argument("path", help="path to file")
         file_scan.add_argument("--json", action="store_true", help="Output raw JSON")
+
+        # compute file hash
+        file_hash = file_sub.add_parser("hash", help="Compute file hashes (SHA256/MD5/SHA1)")
+        file_hash.add_argument("path", help="Path to the file")
 
         # get file report
         file_report = file_sub.add_parser("report", help="Get a file report by hash")
@@ -119,6 +126,7 @@ class VTCLI:
             sys.exit(0)
 
         key = load_api_key()
+        vt = VirusTotalClient(key)
         print(BANNER)
 
         if not key:
@@ -127,23 +135,35 @@ class VTCLI:
 
         if args.command == "file":
             if args.action == "scan":
-                print(f"file scan command: {args.path} {args.json}")
+                # print(f"file scan command: {args.path} {args.json}")
+                response = vt.scan_file(args.path)
+                print_response(response, args.json)
+            elif args.action == "hash":
+                hashes = compute_hashes(args.path)
+                print(f"SHA-256: {hashes["SHA256"]}\nMD5: {hashes["MD5"]}\nSHA-1: {hashes["SHA1"]}")
             elif args.action == "report":
-                print(f"file scan report: {args.hash} {args.json}")
+                # print(f"file scan report: {args.hash} {args.json}")
+                response = vt.get_file_report(args.hash)
+                print_response(response, args.json)
             elif args.action == "rescan":
-                print(f"file rescan: {args.hash} {args.json}")
+                # print(f"file rescan: {args.hash} {args.json}")
+                response = vt.request_rescan(args.hash)
+                print_response(response, args.json)
 
         elif args.command == "url":
             if args.action == "scan":
-                print(f"url scan command: {args.url} {args.json}")
+                # print(f"url scan command: {args.url} {args.json}")
+                response = vt.scan_url(args.url)
+                print_response(response, args.json, is_url=True)
             elif args.action == "report":
                 source = args.id_or_url
                 if validate_url(source):
                     vt_id = url_to_vt_id(source)
                     print(f"[→] Encoded URL to id: {vt_id}")
                 else: vt_id = source
-
-                print(f"url scan report: {vt_id} {args.json}")
+                # print(f"url scan report: {vt_id} {args.json}")
+                response = vt.get_url_report(vt_id)
+                print_response(response, args.json, is_url=True)
 
         elif args.command == "domain":
             print(f"domain command: {args.domain_name} {args.json}")
@@ -158,4 +178,8 @@ class VTCLI:
                 print(f"account quota {args.json}")
 
         elif args.command == "analysis":
-            print(f"analysis command: {args.id} {args.json}")
+            # print(f"analysis command: {args.id} {args.json}")
+            response = vt.get_analysis(args.id)
+            print_response(response, args.json)
+
+        else: self.parser.print_help()

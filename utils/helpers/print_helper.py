@@ -1,12 +1,12 @@
 from rich.console import Console
 from rich.table import Table
 from rich.panel import Panel
-from data.api_constants import Analysis as a, Response as r
+from data.api_constants import FileAnalysis as fa, Response as r
 import json
 
 console = Console()
 
-def print_response(data, json_output=False):
+def print_response(data, json_output=False, is_url=False):
     # If user wants raw JSON output
     if json_output:
         console.print_json(json.dumps(data))
@@ -21,29 +21,29 @@ def print_response(data, json_output=False):
         return
 
     # If response contains 'data'
-    if a.DATA in data and isinstance(data[a.DATA], dict):
-        d = data[a.DATA]
+    if fa.DATA in data and isinstance(data[fa.DATA], dict):
+        d = data[fa.DATA]
 
         # Case 1: File submission (no attributes yet)
-        if d.get(a.TYPE) == "analysis" and a.ATTRIBUTES not in d:
-            console.print("[yellow]🕓 File successfully submitted for analysis.[/yellow]")
-            console.print(f"[cyan]Analysis ID:[/] {d.get(a.ID, 'N/A')}")
+        if d.get(fa.TYPE) == "analysis" and fa.ATTRIBUTES not in d:
+            console.print(f"[yellow]🕓 {"URL" if is_url else "File"} successfully submitted for analysis.[/yellow]")
+            console.print(f"[cyan]Analysis ID:[/] {d.get(fa.ID, 'N/A')}")
             console.print("Run the following command to check the report:")
-            console.print(f"  [bold]vt analysis report {d.get(a.ID, '')}[/bold]")
+            console.print(f"  [bold]vt analysis {d.get(fa.ID, '')}[/bold]")
             return
 
         # Case 2: Completed analysis (has attributes/stats)
-        attrs = d.get(a.ATTRIBUTES, {})
-        stats = attrs.get(a.ATTRIBUTES_STATS) or attrs.get("last_analysis_stats", {})
+        attrs = d.get(fa.ATTRIBUTES, {})
+        stats = attrs.get(fa.ATTRIBUTES_STATS) or attrs.get(fa.ATTRIBUTES_LAST_STATS, {})
 
         # File metadata from meta section if available
-        meta = data.get(a.FILE_META, {}).get(a.FILE_META_INFO, {})
+        meta = data.get(fa.FILE_META, {}).get(fa.FILE_META_INFO, {})
         metadata_panel = Panel(
             f"[cyan]SHA256:[/] {meta.get('sha256', 'N/A')}\n"
             f"[cyan]MD5:[/] {meta.get('md5', 'N/A')}\n"
             f"[cyan]SHA1:[/] {meta.get('sha1', 'N/A')}\n"
             f"[cyan]Size:[/] {meta.get('size', 'N/A')} bytes",
-            title="File Metadata",
+            title=f"{"URL" if is_url else "File"} Metadata",
             expand=False
         )
         console.print(metadata_panel)
@@ -67,7 +67,7 @@ def print_response(data, json_output=False):
             console.print(table)
 
         # Per-antivirus results table
-        results = attrs.get(a.ATTRIBUTES_RESULTS, {})
+        results = attrs.get(fa.ATTRIBUTES_RESULTS, {}) or attrs.get(fa.ATTRIBUTES_LAST_RESULTS, {})
         if results:
             av_table = Table(title="Per-Antivirus Results")
             av_table.add_column("Engine", justify="left")
@@ -76,9 +76,9 @@ def print_response(data, json_output=False):
             av_table.add_column("Result", justify="left")
 
             for engine, info in sorted(results.items()):
-                category = info.get(a.ATTRIBUTES_RESULTS_AVDETECT_CATEGORY, "N/A")
-                result = info.get(a.ATTRIBUTES_RESULTS, "N/A")
-                method = info.get(a.ATTRIBUTES_RESULTS_AVMETHOD, "N/A")
+                category = info.get(fa.ATTRIBUTES_RESULTS_AVDETECT_CATEGORY, "N/A")
+                result = info.get(fa.ATTRIBUTES_RESULTS, "N/A")
+                method = info.get(fa.ATTRIBUTES_RESULTS_AVMETHOD, "N/A")
                 color = "red" if category == "malicious" else \
                         "yellow" if category == "suspicious" else \
                         "green" if category == "harmless" else \
@@ -87,7 +87,7 @@ def print_response(data, json_output=False):
             console.print(av_table)
 
         # show permalink if available
-        permalink = attrs.get("permalink") or d.get(a.LINKS, {}).get(a.LINKS_ITEM)
+        permalink = attrs.get("permalink") or d.get(fa.LINKS, {}).get(fa.LINKS_ITEM)
         if permalink:
             console.print(f"[cyan]Permalink:[/] {permalink}")
         return

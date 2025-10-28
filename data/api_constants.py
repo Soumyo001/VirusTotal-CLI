@@ -5,7 +5,7 @@ class Paths:
     BASE_URL = "https://www.virustotal.com/api/v3"
     API_KEY_ENTRY = "api_key"
 
-class Analysis:
+class FileAnalysis:
     DATA = "data"
     TYPE = "type"
     ID = "id"
@@ -17,7 +17,9 @@ class Analysis:
     FILE_META_INFO = "file_info"
     ATTRIBUTES = "attributes"
     ATTRIBUTES_STATS = "stats"
+    ATTRIBUTES_LAST_STATS = "last_analysis_stats"
     ATTRIBUTES_RESULTS = "results"
+    ATTRIBUTES_LAST_RESULTS = "last_analysis_results"
     ATTRIBUTES_RESULTS_AVNAME = "engine_name"
     ATTRIBUTES_RESULTS_AVMETHOD = "method"
     ATTRIBUTES_RESULTS_AVRESULT = "result"
