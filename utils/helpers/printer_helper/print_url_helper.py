@@ -3,7 +3,7 @@ from rich.table import Table
 from rich.panel import Panel
 from rich.align import Align
 from datetime import datetime, timezone
-from data.api_constants import FileAnalysis as fa, Response as r
+from data.api_constants import URLAnalysis as ua, Response as r
 
 console = Console()
 
@@ -29,27 +29,27 @@ def print_url_details(data, json_output=False, show_headers=False, show_engines=
         return
 
     # Extract main data
-    d = data.get(fa.DATA, {})
+    d = data.get(ua.DATA, {})
     if not isinstance(d, dict):
         console.print_json(data)
         return
 
-    attrs = d.get(fa.ATTRIBUTES, {})
+    attrs = d.get(ua.ATTR, {})
 
     # URL / Meta info
-    original_url = attrs.get("url", d.get(fa.ID, "N/A"))
-    final_url = attrs.get("last_final_url") or attrs.get("final_url", "N/A")
-    title = attrs.get("title", "N/A")
+    original_url = attrs.get(ua.ATTR_URL, d.get(ua.ID, "N/A"))
+    final_url = attrs.get(ua.ATTR_FINAL_URL, "N/A")
+    title = attrs.get(ua.ATTR_TITLE, "N/A")
 
     # Timestamps
-    last_analysis_date = _ts_to_human(attrs.get("last_analysis_date"))
-    first_submission_date = _ts_to_human(attrs.get("first_submission_date"))
-    last_submission_date = _ts_to_human(attrs.get("last_submission_date"))
-    last_modification_date = _ts_to_human(attrs.get("last_modification_date"))
-    times_submitted = attrs.get("times_submitted", "N/A")
+    last_analysis_date = _ts_to_human(attrs.get(ua.ATTR_LAST_ANALYSIS_DATE))
+    first_submission_date = _ts_to_human(attrs.get(ua.ATTR_FIRST_SUBMISSION_DATE))
+    last_submission_date = _ts_to_human(attrs.get(ua.ATTR_LAST_SUBMISSION_DATE))
+    last_modification_date = _ts_to_human(attrs.get(ua.ATTR_LAST_MODIFICATION_DATE))
+    times_submitted = attrs.get(ua.ATTR_TIMES_SUBMITTED, "N/A")
 
     # Stats
-    stats = attrs.get(fa.ATTRIBUTES_LAST_STATS, {})
+    stats = attrs.get(ua.ATTR_LAST_STATS, {}) or attrs.get(ua.ATTR_STATS, {})
     malicious = int(stats.get("malicious", 0))
     suspicious = int(stats.get("suspicious", 0))
     harmless = int(stats.get("harmless", 0))
@@ -58,8 +58,8 @@ def print_url_details(data, json_output=False, show_headers=False, show_engines=
     total_engines = sum(stats.values()) if stats else None
 
     # Reputation / Votes
-    reputation = attrs.get("reputation", "N/A")
-    votes = attrs.get("total_votes", {})
+    reputation = attrs.get(ua.ATTR_REPUTATION, "N/A")
+    votes = attrs.get(ua.ATTR_VOTES, {})
     votes_h = votes.get("harmless", 0)
     votes_m = votes.get("malicious", 0)
 
@@ -72,28 +72,27 @@ def print_url_details(data, json_output=False, show_headers=False, show_engines=
         verdict_label = "[bold green]LIKELY CLEAN[/bold green]"
 
     # HTTP info
-    http_code = attrs.get("last_http_response_code", "N/A")
-    content_len = attrs.get("last_http_response_content_length", "N/A")
-    content_sha256 = attrs.get("last_http_response_content_sha256", "N/A")
-    cookies = attrs.get("last_http_response_cookies", {}) or {}
-    headers = attrs.get("last_http_response_headers", {}) or {}
-    redir_chain = attrs.get("redirection_chain", []) or []
+    http_code = attrs.get(ua.ATTR_HTTP_CODE, "N/A")
+    content_len = attrs.get(ua.ATTR_HTTP_CONTENT_LEN, "N/A")
+    content_sha256 = attrs.get(ua.ATTR_HTTP_CONTENT_SHA256, "N/A")
+    cookies = attrs.get(ua.ATTR_HTTP_COOKIES, {}) or {}
+    headers = attrs.get(ua.ATTR_HTTP_HEADERS, {}) or {}
+    redir_chain = attrs.get(ua.ATTR_REDIRECTION_CHAIN, []) or []
 
     # Tags / trackers / categories
-    tags = attrs.get("tags", []) or []
-    trackers = attrs.get("trackers", {}) or {}
-    categories = attrs.get("categories", {}) or {}
+    tags = attrs.get(ua.ATTR_TAGS, []) or []
+    trackers = attrs.get(ua.ATTR_TRACKERS, {}) or {}
+    categories = attrs.get(ua.ATTR_CATEGORIES, {}) or {}
 
     # Per-engine results
-    results = attrs.get(fa.ATTRIBUTES_LAST_RESULTS, {}) or attrs.get(fa.ATTRIBUTES_RESULTS, {})
+    results = attrs.get(ua.ATTR_LAST_RESULTS, {}) or attrs.get(ua.ATTR_RESULTS, {})
     highlighted = [
-        (engine, info)
-        for engine, info in results.items()
-        if info.get(fa.ATTRIBUTES_RESULTS_AVDETECT_CATEGORY, "").lower() in ("malicious", "suspicious")
+        (engine, info) for engine, info in results.items()
+        if info.get(ua.ATTR_RESULTS_AVDETECT_CATEGORY, "").lower() in ("malicious", "suspicious")
     ]
 
     # Crowd context
-    crowds = attrs.get("crowdsourced_context", []) or []
+    crowds = attrs.get(ua.ATTR_CROWD_CONTEXT, []) or []
 
     # === Top Summary ===
     verdict_line = (
@@ -165,9 +164,9 @@ def print_url_details(data, json_output=False, show_headers=False, show_engines=
         av_table.add_column("Result", justify="left")
 
         for engine, info in sorted(highlighted, key=lambda x: x[0].lower()):
-            cat = info.get(fa.ATTRIBUTES_RESULTS_AVDETECT_CATEGORY, "N/A")
-            method = info.get(fa.ATTRIBUTES_RESULTS_AVMETHOD, "N/A")
-            result = info.get(fa.ATTRIBUTES_RESULTS_AVRESULT, "N/A")
+            cat = info.get(ua.ATTR_RESULTS_AVDETECT_CATEGORY, "N/A")
+            method = info.get(ua.ATTR_RESULTS_AVMETHOD, "N/A")
+            result = info.get(ua.ATTR_RESULTS_AVRESULT, "N/A")
             color = "red" if cat == "malicious" else "yellow"
             av_table.add_row(engine, f"[{color}]{cat}[/{color}]", method, result)
         console.print(av_table)
@@ -182,9 +181,9 @@ def print_url_details(data, json_output=False, show_headers=False, show_engines=
         all_table.add_column("Method", justify="left")
         all_table.add_column("Result", justify="left")
         for engine, info in sorted(results.items()):
-            cat = info.get(fa.ATTRIBUTES_RESULTS_AVDETECT_CATEGORY, "N/A")
-            method = info.get(fa.ATTRIBUTES_RESULTS_AVMETHOD, "N/A")
-            result = info.get(fa.ATTRIBUTES_RESULTS_AVRESULT, "N/A")
+            cat = info.get(ua.ATTR_RESULTS_AVDETECT_CATEGORY, "N/A")
+            method = info.get(ua.ATTR_RESULTS_AVMETHOD, "N/A")
+            result = info.get(ua.ATTR_RESULTS_AVRESULT, "N/A")
             color = (
                 "red" if cat == "malicious" else
                 "yellow" if cat == "suspicious" else

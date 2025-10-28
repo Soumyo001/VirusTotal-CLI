@@ -6,7 +6,7 @@ import json
 
 console = Console()
 
-def print_file_response(data, json_output=False, is_url=False):
+def print_file_details(data, json_output=False):
     # If user wants raw JSON output
     if json_output:
         console.print_json(json.dumps(data))
@@ -26,7 +26,7 @@ def print_file_response(data, json_output=False, is_url=False):
 
         # Case 1: File submission (no attributes yet)
         if d.get(fa.TYPE) == "analysis" and fa.ATTRIBUTES not in d:
-            console.print(f"[yellow]🕓 {"URL" if is_url else "File"} successfully submitted for analysis.[/yellow]")
+            console.print("[yellow]🕓 File successfully submitted for analysis.[/yellow]")
             console.print(f"[cyan]Analysis ID:[/] {d.get(fa.ID, 'N/A')}")
             console.print("Run the following command to check the report:")
             console.print(f"  [bold]vt analysis {d.get(fa.ID, '')}[/bold]")
@@ -43,7 +43,7 @@ def print_file_response(data, json_output=False, is_url=False):
             f"[cyan]MD5:[/] {meta.get('md5', 'N/A')}\n"
             f"[cyan]SHA1:[/] {meta.get('sha1', 'N/A')}\n"
             f"[cyan]Size:[/] {meta.get('size', 'N/A')} bytes",
-            title=f"{"URL" if is_url else "File"} Metadata",
+            title="File Metadata",
             expand=False
         )
         console.print(metadata_panel)

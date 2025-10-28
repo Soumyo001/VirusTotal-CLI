@@ -4,7 +4,8 @@ from data.constants import BANNER
 from utils.helpers.key_helper import save_api_key, load_api_key, remove_api_key, display_api_key
 from utils.helpers.hash import compute_hashes
 from utils.helpers.url_to_vt_id_helper import url_to_vt_id
-from utils.helpers.printer_helper.print_file_helper import print_file_response
+from utils.helpers.printer_helper.print_file_helper import print_file_details
+from utils.helpers.printer_helper.print_url_helper import print_url_details
 from utils.validators.url_validator import validate_url
 from api.api_client import VirusTotalClient
 
@@ -98,9 +99,16 @@ class VTCLI:
         account_quota.add_argument("--json", action="store_true")
 
         # get analysis
-        analysis_parser = subparsers.add_parser("analysis", help="Analysis info")
-        analysis_parser.add_argument("id", help="Analysis ID")
-        analysis_parser.add_argument("--json", action="store_true")
+        analysis_parser = subparsers.add_parser("analysis", help="Get file/URL analysis result")
+        analysis_sub = analysis_parser.add_subparsers(dest="action", help="Analysis for file/URL")
+
+        file_analysis = analysis_sub.add_parser("file", help="Get file analysis result")
+        file_analysis.add_argument("id", help="File Analysis ID")
+        file_analysis.add_argument("--json", action="store_true")
+
+        url_analysis = analysis_sub.add_parser("url", help="Get URL analysis results")
+        url_analysis.add_argument("id", help="URL Analysis ID")
+        url_analysis.add_argument("--json", action="store_true")
 
         return parser
 
@@ -137,24 +145,24 @@ class VTCLI:
             if args.action == "scan":
                 # print(f"file scan command: {args.path} {args.json}")
                 response = vt.scan_file(args.path)
-                print_file_response(response, args.json)
+                print_file_details(response, args.json)
             elif args.action == "hash":
                 hashes = compute_hashes(args.path)
                 print(f"SHA-256: {hashes["SHA256"]}\nMD5: {hashes["MD5"]}\nSHA-1: {hashes["SHA1"]}")
             elif args.action == "report":
                 # print(f"file scan report: {args.hash} {args.json}")
                 response = vt.get_file_report(args.hash)
-                print_file_response(response, args.json)
+                print_file_details(response, args.json)
             elif args.action == "rescan":
                 # print(f"file rescan: {args.hash} {args.json}")
                 response = vt.request_rescan(args.hash)
-                print_file_response(response, args.json)
+                print_file_details(response, args.json)
 
         elif args.command == "url":
             if args.action == "scan":
                 # print(f"url scan command: {args.url} {args.json}")
                 response = vt.scan_url(args.url)
-                print_file_response(response, args.json, is_url=True)
+                print_url_details(response, args.json, is_url=True)
             elif args.action == "report":
                 source = args.id_or_url
                 if validate_url(source):
@@ -163,7 +171,7 @@ class VTCLI:
                 else: vt_id = source
                 # print(f"url scan report: {vt_id} {args.json}")
                 response = vt.get_url_report(vt_id)
-                print_file_response(response, args.json, is_url=True)
+                print_url_details(response, args.json, is_url=True)
 
         elif args.command == "domain":
             print(f"domain command: {args.domain_name} {args.json}")
@@ -178,8 +186,11 @@ class VTCLI:
                 print(f"account quota {args.json}")
 
         elif args.command == "analysis":
-            # print(f"analysis command: {args.id} {args.json}")
+            print(f"analysis command: {args.id} {args.json} {args.action}")
             response = vt.get_analysis(args.id)
-            print_file_response(response, args.json)
+            if args.action == "file":
+                print_file_details(response, args.json)
+            elif args.action == "url":
+                print_url_details(response, args.json)
 
         else: self.parser.print_help()

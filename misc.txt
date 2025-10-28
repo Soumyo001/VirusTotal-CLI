@@ -14,7 +14,7 @@ vt ip info 8.8.8.8
 
 vt account info
 vt account quota
-vt analysis 7b3f8b8c1e0f92a8b3f0...
+vt analysis 7b3f8b8c1e0f92a8b3f0... --url/--file
 
 
 ---- basic request (file scan) -----
