@@ -25,7 +25,7 @@ url = "https://www.virustotal.com/api/v3/files"
 files = { "file": ("ms.exe", open("ms.exe", "rb"), "application/x-msdownload") }
 headers = {
     "accept": "application/json",
-    "x-apikey": "8406574c7f036c8822d5607f8e2900db67d6424972b7684671a5a2aabf571a7a"
+    "x-apikey": "API_KEY"
 }
 
 response = requests.post(url, files=files, headers=headers)
