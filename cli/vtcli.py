@@ -129,6 +129,14 @@ class VTCLI:
         url_analysis.add_argument("--engines", action="store_true")
         url_analysis.add_argument("--json", action="store_true")
 
+        domain_analysis = analysis_sub.add_parser("domain", help="Get Domain analysis results")
+        domain_analysis.add_argument("id", help="Domain analysis ID")
+        domain_analysis.add_argument("--json", action="store_true")
+
+        ip_analysis = analysis_sub.add_parser("ip", help="Get IP analysis results")
+        ip_analysis.add_argument("id", help="IP analysis ID")
+        ip_analysis.add_argument("--json", action="store_true")
+
         return parser
 
     def run(self):
@@ -218,8 +226,10 @@ class VTCLI:
             # print(f"analysis command: {args.id} {args.json} {args.action}")
             response = vt.get_analysis(args.id)
             if args.action == "file":
-                print_file_details(response, args.json)
+                print_file_details(response, json_output=args.json)
             elif args.action == "url":
                 print_url_details(response, json_output=args.json, show_headers=args.headers, show_engines=args.engines)
+            elif args.action == "domain":
+                print_domain_details(response, json_output=args.json)
 
         else: self.parser.print_help()

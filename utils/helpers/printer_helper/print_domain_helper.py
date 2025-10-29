@@ -33,7 +33,7 @@ def print_domain_details(domain_data, json_output=False):
         console.print("[yellow]🕓 File successfully submitted for analysis.[/yellow]")
         console.print(f"[cyan]Analysis ID:[/] {data.get(da.ID, 'N/A')}")
         console.print("Run the following command to check the report:")
-        console.print(f"  [bold]vt analysis url {data.get(da.ID, '')}[/bold]")
+        console.print(f"  [bold]vt analysis domain {data.get(da.ID, '')}[/bold]")
         return
 
     console.rule(f"[bold cyan]Domain Analysis Report: {domain_id}")

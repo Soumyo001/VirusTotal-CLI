@@ -63,7 +63,7 @@ class VirusTotalClient():
         return response.json()
     
     def domain_rescan(self, domain: str):
-        response = requests.get(f"{p.BASE_URL}/domains/{domain}/analyse", headers=self.headers)
+        response = requests.post(f"{p.BASE_URL}/domains/{domain}/analyse", headers=self.headers)
         return response.json()
     
     # ----------------- IP SCAN -----------------
@@ -72,7 +72,7 @@ class VirusTotalClient():
         return response.json()
     
     def ip_rescan(self, ip: str):
-        response = requests.get(f"{p.BASE_URL}/ip_addresses/{id}/analyse", headers=self.headers)
+        response = requests.post(f"{p.BASE_URL}/ip_addresses/{id}/analyse", headers=self.headers)
         return response.json()
 
     # ----------------- ACCOUNT -----------------
