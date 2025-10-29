@@ -8,6 +8,7 @@ from utils.helpers.printer_helper.print_file_helper import print_file_details
 from utils.helpers.printer_helper.print_url_helper import print_url_details
 from utils.helpers.printer_helper.print_domain_helper import print_domain_details
 from utils.helpers.printer_helper.print_ip_helper import print_ip_details
+from utils.helpers.printer_helper.print_user import print_user_details 
 from utils.validators.url_validator import validate_url
 from api.api_client import VirusTotalClient
 
@@ -112,10 +113,6 @@ class VTCLI:
         account_info = account_sub.add_parser("info", help="Get current user info")
         account_info.add_argument("--json", action="store_true")
 
-        # user account quota
-        account_quota = account_sub.add_parser("quota", help="Show API usage/quota info")
-        account_quota.add_argument("--json", action="store_true")
-
         # get analysis
         analysis_parser = subparsers.add_parser("analysis", help="Get file/URL analysis result")
         analysis_sub = analysis_parser.add_subparsers(dest="action", help="Analysis for file/URL")
@@ -183,7 +180,7 @@ class VTCLI:
                 print_file_details(response, args.json)
             elif args.action == "rescan":
                 # print(f"file rescan: {args.hash} {args.json}")
-                response = vt.request_rescan(args.hash)
+                response = vt.request_file_rescan(args.hash)
                 print_file_details(response, args.json)
 
         elif args.command == "url":
@@ -202,7 +199,7 @@ class VTCLI:
                 print_url_details(response, json_output=args.json, show_headers=args.headers, show_engines=args.engines)
 
         elif args.command == "domain":
-            print(f"domain command: {args.domain_name} {args.json}")
+            # print(f"domain command: {args.domain_name} {args.json}")
             if args.action == "report":
                 response = vt.get_domain_report(args.domain_name)
                 print_domain_details(response, args.json)
@@ -211,7 +208,7 @@ class VTCLI:
                 print_domain_details(response, args.json)
 
         elif args.command == "ip":
-            print(f"IP command: {args.ip_address} {args.json}")
+            # print(f"IP command: {args.ip_address} {args.json}")
             if args.action == "report":
                 response = vt.get_ip_report(args.ip_address)
                 print_ip_details(response, json_output=args.json)
@@ -221,9 +218,8 @@ class VTCLI:
 
         elif args.command == "account":
             if args.action == "info":
-                print(f"account info {args.json}")
-            elif args.action == "quota":
-                print(f"account quota {args.json}")
+                response = vt.get_user_info()
+                print_user_details(response, args.json)
 
         elif args.command == "analysis":
             # print(f"analysis command: {args.id} {args.json} {args.action}")

@@ -43,8 +43,8 @@ class VirusTotalClient():
         response = requests.get(f"{p.BASE_URL}/files/{file_hash}", headers=self.headers)
         return response.json()
     
-    def request_rescan(self, file_hash: str):
-        response = requests.get(f"{p.BASE_URL}/files/{file_hash}/analyse", headers=self.headers)
+    def request_file_rescan(self, file_hash: str):
+        response = requests.post(f"{p.BASE_URL}/files/{file_hash}/analyse", headers=self.headers)
         return response.json()
     
     # ----------------- URL SCAN -----------------
@@ -77,11 +77,7 @@ class VirusTotalClient():
 
     # ----------------- ACCOUNT -----------------
     def get_user_info(self):
-        resp = requests.get(f"{p.BASE_URL}/users/me", headers=self.headers)
-        return resp.json()
-
-    def get_usage_info(self):
-        resp = requests.get(f"{p.BASE_URL}/users/me/usage", headers=self.headers)
+        resp = requests.get(f"{p.BASE_URL}/users/{self.api_key}", headers=self.headers)
         return resp.json()
 
     # ----------------- FILE/URL ANALYSIS REPORT -----------------
