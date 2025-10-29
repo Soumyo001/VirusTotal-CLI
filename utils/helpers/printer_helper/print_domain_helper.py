@@ -5,11 +5,57 @@ from data.api_constants import DomainAnalysis as da, Response as r
 
 console = Console()
 
-def fmt_time(ts):
+def _fmt_time(ts):
     try:
         return datetime.fromtimestamp(int(ts), tz=timezone.utc).strftime("%Y-%m-%d %H:%M:%S UTC")
     except Exception:
         return "N/A"
+    
+def _flatten_domain_entities(entities, parent_roles=None):
+    flat_list = []
+    for e in entities:
+        roles = e.get("roles", [])
+        if parent_roles:
+            roles = parent_roles + roles
+        roles_str = ", ".join(roles) if roles else "N/A"
+
+        # Extract multiple values from vcard_array
+        fn_list, email_list, tel_list, org_list, adr_list = [], [], [], [], []
+        for v in e.get("vcard_array", []):
+            name = v.get("name")
+            values = v.get("values", [])
+            if not values:
+                continue
+            if name == "fn":
+                fn_list.extend(values)
+            elif name == "email":
+                email_list.extend(values)
+            elif name == "tel":
+                tel_list.extend(values)
+            elif name == "org":
+                org_list.extend(values)
+            elif name == "adr":
+                adr_label = v.get("parameters", {}).get("label")
+                if adr_label:
+                    adr_list.extend(adr_label)
+                else:
+                    adr_list.append(", ".join(v if v!="" else "?" for v in values))
+
+        flat_list.append({
+            "roles": roles_str,
+            "fn": ", ".join(fn_list) if fn_list else "N/A",
+            "org": ", ".join(org_list) if org_list else "N/A",
+            "email": ", ".join(email_list) if email_list else "N/A",
+            "tel": ", ".join(tel_list) if tel_list else "N/A",
+            "adr": "; ".join(adr_list) if adr_list else "N/A"
+        })
+
+        # recursively process nested entities
+        nested = e.get("entities", [])
+        if nested:
+            flat_list.extend(_flatten_domain_entities(nested, roles))
+
+    return flat_list
 
 def print_domain_details(domain_data, json_output=False):
     if json_output:
@@ -20,6 +66,7 @@ def print_domain_details(domain_data, json_output=False):
     data = domain_data.get(da.DATA, {})
     attrs = data.get(da.ATTRIBUTES, {})
     domain_id = data.get(da.ID, "N/A")
+    rdap_entities = attrs.get("rdap", {}).get("entities", [])
 
     if r.ERROR in data:
         err = data[r.ERROR]
@@ -44,9 +91,9 @@ def print_domain_details(domain_data, json_output=False):
 
     # reputation colored magenta for visibility
     info_table.add_row("Reputation", f"[magenta]{str(attrs.get(da.ATTR_REPUTATION, 'N/A'))}[/magenta]")
-    info_table.add_row("Creation Date", f"[dim]{fmt_time(attrs.get(da.ATTR_CREATION_DATE))}[/dim]")
-    info_table.add_row("Last Analysis", f"[dim]{fmt_time(attrs.get(da.ATTR_LAST_ANALYSIS_DATE))}[/dim]")
-    info_table.add_row("Last Modification", f"[dim]{fmt_time(attrs.get(da.ATTR_LAST_MOD_DATE))}[/dim]")
+    info_table.add_row("Creation Date", f"[dim]{_fmt_time(attrs.get(da.ATTR_CREATION_DATE))}[/dim]")
+    info_table.add_row("Last Analysis", f"[dim]{_fmt_time(attrs.get(da.ATTR_LAST_ANALYSIS_DATE))}[/dim]")
+    info_table.add_row("Last Modification", f"[dim]{_fmt_time(attrs.get(da.ATTR_LAST_MOD_DATE))}[/dim]")
 
     console.print(info_table)
 
@@ -105,7 +152,7 @@ def print_domain_details(domain_data, json_output=False):
         rank_table.add_column("Rank", justify="center")
         rank_table.add_column("Timestamp", justify="left")
         for name, rinfo in ranks.items():
-            rank_table.add_row(name, str(rinfo.get("rank", "N/A")), fmt_time(rinfo.get("timestamp")))
+            rank_table.add_row(name, str(rinfo.get("rank", "N/A")), _fmt_time(rinfo.get("timestamp")))
         console.print(rank_table)
 
     # --- DNS Records ---
@@ -126,7 +173,7 @@ def print_domain_details(domain_data, json_output=False):
     # --- Whois Info ---
     registrar = attrs.get(da.ATTR_REGISTRAR, "N/A")
     whois_info = attrs.get(da.ATTR_WHOIS, "N/A")
-    whois_date = fmt_time(attrs.get(da.ATTR_WHOIS_DATE))
+    whois_date = _fmt_time(attrs.get(da.ATTR_WHOIS_DATE))
     if registrar or whois_info:
         whois_table = Table(title="Whois Information")
         whois_table.add_column("Field", justify="left")
@@ -146,6 +193,27 @@ def print_domain_details(domain_data, json_output=False):
         for k, v in whois_details.items():
             whois_ext_table.add_row(k, str(v))
         console.print(whois_ext_table)
+
+    if rdap_entities:
+        flat_entities = _flatten_domain_entities(rdap_entities)
+        if flat_entities:
+            ent_table = Table(title="RDAP Domain Entities / Contacts")
+            ent_table.add_column("Roles", justify="center")
+            ent_table.add_column("Name / Org", justify="left")
+            ent_table.add_column("Email", justify="left")
+            ent_table.add_column("Phone", justify="left")
+            ent_table.add_column("Address", justify="left")
+
+            for ent in flat_entities:
+                ent_table.add_row(
+                    ent["roles"],
+                    f'{ent["fn"]} / {ent["org"]}',
+                    ent["email"],
+                    ent["tel"],
+                    ent["adr"]
+                )
+
+            console.print(ent_table)
 
     # --- Votes ---
     votes = attrs.get(da.ATTR_VOTES, {})
@@ -179,7 +247,7 @@ def print_domain_details(domain_data, json_output=False):
         for res in resolutions[:10]:
             res_table.add_row(
                 res.get("ip_address", "N/A"),
-                fmt_time(res.get("date"))
+                _fmt_time(res.get("date"))
             )
         console.print(res_table)
 

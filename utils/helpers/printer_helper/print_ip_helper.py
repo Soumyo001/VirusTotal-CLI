@@ -5,12 +5,54 @@ from data.api_constants import IPAnalysis as ia, Response as r
 
 console = Console()
 
-def fmt_time(ts):
+def _fmt_time(ts):
     try:
         return datetime.fromtimestamp(int(ts), tz=timezone.utc).strftime("%Y-%m-%d %H:%M:%S UTC")
     except Exception:
         return "N/A"
 
+def _flatten_rdap_entities(entities, parent_roles=None):
+    """
+    Recursively flattens RDAP entities into a list of dictionaries with:
+    - roles
+    - all names / orgs
+    - all emails
+    - all phones
+    """
+    flat_list = []
+    for e in entities:
+        roles = e.get("roles", [])
+        if parent_roles:
+            roles = parent_roles + roles
+        roles_str = ", ".join(roles) if roles else "N/A"
+
+        # extract all fn, email, tel from vcard_array
+        fn_list, email_list, tel_list = [], [], []
+        for v in e.get("vcard_array", []):
+            name = v.get("name")
+            values = v.get("values", [])
+            if not values:
+                continue
+            if name == "fn":
+                fn_list.extend(values)
+            elif name == "email":
+                email_list.extend(values)
+            elif name == "tel":
+                tel_list.extend(values)
+
+        flat_list.append({
+            "roles": roles_str,
+            "fn": ", ".join(fn_list) if fn_list else "N/A",
+            "email": ", ".join(email_list) if email_list else "N/A",
+            "tel": ", ".join(tel_list) if tel_list else "N/A"
+        })
+
+        # recursively flatten nested entities
+        nested = e.get("entities", [])
+        if nested:
+            flat_list.extend(_flatten_rdap_entities(nested, roles))
+
+    return flat_list
 
 def print_ip_details(ip_data, json_output=False):
     if json_output:
@@ -21,6 +63,7 @@ def print_ip_details(ip_data, json_output=False):
     data = ip_data.get(ia.DATA, {})
     attrs = data.get(ia.ATTRIBUTES, {})
     ip_addr = data.get(ia.ID, "N/A")
+    rdap = attrs.get(ia.ATTR_RDAP, {}) or {}
 
     if r.ERROR in data:
         err = data[r.ERROR]
@@ -33,7 +76,7 @@ def print_ip_details(ip_data, json_output=False):
         console.print("[yellow]🕓 File successfully submitted for analysis.[/yellow]")
         console.print(f"[cyan]Analysis ID:[/] {data.get(ia.ID, 'N/A')}")
         console.print("Run the following command to check the report:")
-        console.print(f"  [bold]vt analysis domain {data.get(ia.ID, '')}[/bold]")
+        console.print(f"  [bold]vt analysis ip {data.get(ia.ID, '')}[/bold]")
         return
 
     console.rule(f"[bold cyan]IP Analysis Report: [white]{ip_addr}[/white]")
@@ -50,10 +93,45 @@ def print_ip_details(ip_data, json_output=False):
     info_table.add_row("Continent", attrs.get(ia.ATTR_CONTINENT, "N/A"))
     info_table.add_row("Country", attrs.get(ia.ATTR_COUNTRY, "N/A"))
     info_table.add_row("Reputation", f"[magenta]{str(attrs.get(ia.ATTR_REPUTATION, 'N/A'))}[/magenta]")
-    info_table.add_row("Last Modification", f"[dim]{fmt_time(attrs.get(ia.ATTR_LAST_MOD_DATE))}[/dim]")
-    info_table.add_row("Last Analysis", f"[dim]{fmt_time(attrs.get(ia.ATTR_LAST_ANALYSIS_DATE))}[/dim]")
+    info_table.add_row("Last Modification", f"[dim]{_fmt_time(attrs.get(ia.ATTR_LAST_MOD_DATE))}[/dim]")
+    info_table.add_row("Last Analysis", f"[dim]{_fmt_time(attrs.get(ia.ATTR_LAST_ANALYSIS_DATE))}[/dim]")
+
+    # --- RDAP Summary ---
+    if rdap:
+        info_table.add_row("RDAP Handle", rdap.get("handle", "N/A"))
+        info_table.add_row("IP Version", rdap.get("ip_version", "N/A"))
+        info_table.add_row("RDAP Name", rdap.get("name", "N/A"))
+        info_table.add_row("Assignment Type", rdap.get("type", "N/A"))
+        status_list = rdap.get("status", [])
+        info_table.add_row("RDAP Status", ", ".join(status_list) if status_list else "N/A")
+        info_table.add_row("Port43 Server", rdap.get("port43", "N/A"))
 
     console.print(info_table)
+
+    # --- CIDRs ---
+    cidrs = rdap.get("cidr0_cidrs", [])
+    if cidrs:
+        cidr_table = Table(title="CIDR Prefixes")
+        cidr_table.add_column("IPv4 Prefix", justify="left")
+        cidr_table.add_column("Length", justify="center")
+        for c in cidrs:
+            cidr_table.add_row(c.get("v4prefix", "N/A"), str(c.get("length", "N/A")))
+        console.print(cidr_table)
+
+    # --- RDAP Entities ---
+    entities = rdap.get("entities", [])
+    if entities:
+        ent_table = Table(title="RDAP Entities (Contacts)")
+        ent_table.add_column("Role", justify="center")
+        ent_table.add_column("Name / Org", justify="left")
+        ent_table.add_column("Email", justify="left")
+        ent_table.add_column("Phone", justify="left")
+
+        flat_entities = _flatten_rdap_entities(entities)
+        for ent in flat_entities:
+            ent_table.add_row(ent["roles"], ent["fn"], ent["email"], ent["tel"])
+            
+        console.print(ent_table)
 
     # --- Last Analysis Stats ---
     stats = attrs.get(ia.ATTR_LAST_STATS, {}) or attrs.get(ia.ATTR_STATS, {})
@@ -114,7 +192,7 @@ def print_ip_details(ip_data, json_output=False):
 
     # --- Whois Info ---
     whois_info = attrs.get(ia.ATTR_WHOIS, "N/A")
-    whois_date = fmt_time(attrs.get(ia.ATTR_WHOIS_DATE))
+    whois_date = _fmt_time(attrs.get(ia.ATTR_WHOIS_DATE))
     if whois_info:
         whois_table = Table(title="Whois Information")
         whois_table.add_column("Field", justify="left")

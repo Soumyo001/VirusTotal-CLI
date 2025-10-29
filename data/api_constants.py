@@ -158,6 +158,7 @@ class IPAnalysis:
     ATTR_WHOIS = "whois"
     ATTR_WHOIS_DATE = "whois_date"
     ATTR_TAGS = "tags"
+    ATTR_RDAP = "rdap"
     ATTR_STATS = "stats"
     ATTR_LAST_STATS = "last_analysis_stats"
     ATTR_RESULTS = "results"
