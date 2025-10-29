@@ -7,6 +7,7 @@ from utils.helpers.url_to_vt_id_helper import url_to_vt_id
 from utils.helpers.printer_helper.print_file_helper import print_file_details
 from utils.helpers.printer_helper.print_url_helper import print_url_details
 from utils.helpers.printer_helper.print_domain_helper import print_domain_details
+from utils.helpers.printer_helper.print_ip_helper import print_ip_details
 from utils.validators.url_validator import validate_url
 from api.api_client import VirusTotalClient
 
@@ -213,8 +214,10 @@ class VTCLI:
             print(f"IP command: {args.ip_address} {args.json}")
             if args.action == "report":
                 response = vt.get_ip_report(args.ip_address)
+                print_ip_details(response, json_output=args.json)
             elif args.action == "rescan":
                 response = vt.ip_rescan(args.ip_address)
+                print_ip_details(response, json_output=args.json)
 
         elif args.command == "account":
             if args.action == "info":
@@ -231,5 +234,7 @@ class VTCLI:
                 print_url_details(response, json_output=args.json, show_headers=args.headers, show_engines=args.engines)
             elif args.action == "domain":
                 print_domain_details(response, json_output=args.json)
+            elif args.action == "ip":
+                print_ip_details(response, json_output=args.json)
 
         else: self.parser.print_help()
