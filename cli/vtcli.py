@@ -6,6 +6,7 @@ from utils.helpers.hash import compute_hashes
 from utils.helpers.url_to_vt_id_helper import url_to_vt_id
 from utils.helpers.printer_helper.print_file_helper import print_file_details
 from utils.helpers.printer_helper.print_url_helper import print_url_details
+from utils.helpers.printer_helper.print_domain_helper import print_domain_details
 from utils.validators.url_validator import validate_url
 from api.api_client import VirusTotalClient
 
@@ -80,13 +81,27 @@ class VTCLI:
 
         # Domain related command
         domain_parser = subparsers.add_parser("domain", help="Domain intelligence")
-        domain_parser.add_argument("domain_name", help="Domain name")
-        domain_parser.add_argument("--json", action="store_true")
+        domain_sub = domain_parser.add_subparsers(dest="action", help="Domain related actions")
+
+        domain_report = domain_sub.add_parser("report", help="Get a previously scanned domain report")
+        domain_report.add_argument("domain_name", help="Domain name")
+        domain_report.add_argument("--json", action="store_true")
+
+        domain_rescan = domain_sub.add_parser("rescan", help="request domain rescan")
+        domain_rescan.add_argument("domain_name")
+        domain_rescan.add_argument("--json", action="store_true")
 
         # IP related command
         ip_parser = subparsers.add_parser("ip", help="IP intelligence")
-        ip_parser.add_argument("ip_address", help="IP address")
-        ip_parser.add_argument("--json", action="store_true")
+        ip_sub = ip_parser.add_subparsers(dest="action", help="IP related commands")
+
+        ip_report = ip_sub.add_parser("report", help="Get previously scanned IP report")
+        ip_report.add_argument("ip_address", help="IP address")
+        ip_report.add_argument("--json", action="store_true")
+
+        ip_rescan = ip_sub.add_parser("rescan", help="Request IP rescan")
+        ip_rescan.add_argument("ip_address")
+        ip_rescan.add_argument("--json", action="store_true")
 
         # user account related command
         account_parser = subparsers.add_parser("account", help="Current user account related operations")
@@ -179,9 +194,19 @@ class VTCLI:
 
         elif args.command == "domain":
             print(f"domain command: {args.domain_name} {args.json}")
+            if args.action == "report":
+                response = vt.get_domain_report(args.domain_name)
+                print_domain_details(response, args.json)
+            elif args.action == "rescan":
+                response = vt.domain_rescan(args.domain_name)
+                print_domain_details(response, args.json)
 
         elif args.command == "ip":
             print(f"IP command: {args.ip_address} {args.json}")
+            if args.action == "report":
+                response = vt.get_ip_report(args.ip_address)
+            elif args.action == "rescan":
+                response = vt.ip_rescan(args.ip_address)
 
         elif args.command == "account":
             if args.action == "info":

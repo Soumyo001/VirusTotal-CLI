@@ -84,6 +84,32 @@ class URLAnalysis:
     ATTR_LAST_MODIFICATION_DATE = "last_modification_date"
     ATTR_TIMES_SUBMITTED = "times_submitted"
 
+class DomainAnalysis:
+    DATA = "data"
+    ID = "id"
+    TYPE = 'type'
+    ATTRIBUTES = "attributes"
+    ATTR_CATEGORY = "category"
+    ATTR_REPUTATION = "reputation"
+    ATTR_CREATION_DATE = "creation_date"
+    ATTR_LAST_ANALYSIS_DATE = "last_analysis_date"
+    ATTR_LAST_MOD_DATE = "last_modification_date"
+    ATTR_CATEGORIES = "categories"
+    ATTR_STATS = "stats"
+    ATTR_LAST_STATS = "last_analysis_stats"
+    ATTR_RESULTS = "results"
+    ATTR_LAST_RESULTS = "last_analysis_results"
+    ATTR_RESULTS_ENGINE_NAME = "engine_name"
+    ATTR_RESULTS_METHOD = "method"
+    ATTR_RESULTS_RESULT = "result"
+    ATTR_RESULTS_DETECT_CATEGORY = "category"
+    ATTR_POPULARITY_RANKS = "popularity_ranks"
+    ATTR_DNS_RECORDS = "last_dns_records"
+    ATTR_REGISTRAR = "registrar"
+    ATTR_WHOIS = "whois"
+    ATTR_WHOIS_DATE = "whois_date"
+    ATTR_TAGS = "tags"
+
 class File_MetaData:
     FILE_META_DATA = ["sha256", "md5", "sha1", "size"]
 

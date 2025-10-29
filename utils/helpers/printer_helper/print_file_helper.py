@@ -95,7 +95,7 @@ def print_file_details(data, json_output=False):
                 for engine, r in sorted(results.items()):
                     cat = r.get(fa.ATTRIBUTES_RESULTS_AVDETECT_CATEGORY, "N/A")
                     method = r.get(fa.ATTRIBUTES_RESULTS_AVMETHOD, "N/A")
-                    result = r.get(fa.ATTRIBUTES_RESULTS_AVRESULT, "—") or "—"
+                    result = r.get(fa.ATTRIBUTES_RESULTS_AVRESULT, "N/A")
                     color = (
                         "red" if cat == "malicious" else
                         "yellow" if cat == "suspicious" else

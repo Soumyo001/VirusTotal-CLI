@@ -214,9 +214,9 @@ def print_url_details(data, json_output=False, show_headers=False, show_engines=
         all_table.add_column("Method", justify="left")
         all_table.add_column("Result", justify="left")
         for engine, info in sorted(results.items()):
-            cat = info.get(ua.ATTR_RESULTS_AVDETECT_CATEGORY, info.get("category", "N/A"))
-            method = info.get(ua.ATTR_RESULTS_AVMETHOD, info.get("method", "N/A"))
-            result = info.get(ua.ATTR_RESULTS_AVRESULT, info.get("result", "N/A"))
+            cat = info.get(ua.ATTR_RESULTS_AVDETECT_CATEGORY, "N/A")
+            method = info.get(ua.ATTR_RESULTS_AVMETHOD, "N/A")
+            result = info.get(ua.ATTR_RESULTS_AVRESULT, "N/A")
             color = (
                 "red" if cat == "malicious" else
                 "yellow" if cat == "suspicious" else

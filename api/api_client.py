@@ -57,6 +57,33 @@ class VirusTotalClient():
         response = requests.get(f"{p.BASE_URL}/urls/{url_id}", headers=self.headers)
         return response.json()
 
+    # ----------------- DOMAIN SCAN -----------------
+    def get_domain_report(self, domain: str):
+        response = requests.get(f"{p.BASE_URL}/domains/{domain}", headers=self.headers)
+        return response.json()
+    
+    def domain_rescan(self, domain: str):
+        response = requests.get(f"{p.BASE_URL}/domains/{domain}/analyse", headers=self.headers)
+        return response.json()
+    
+    # ----------------- IP SCAN -----------------
+    def get_ip_report(self, ip: str):
+        response = requests.get(f"{p.BASE_URL}/ip_addresses/{ip}", headers=self.headers)
+        return response.json()
+    
+    def ip_rescan(self, ip: str):
+        response = requests.get(f"{p.BASE_URL}/ip_addresses/{id}/analyse", headers=self.headers)
+        return response.json()
+
+    # ----------------- ACCOUNT -----------------
+    def get_user_info(self):
+        resp = requests.get(f"{p.BASE_URL}/users/me", headers=self.headers)
+        return resp.json()
+
+    def get_usage_info(self):
+        resp = requests.get(f"{p.BASE_URL}/users/me/usage", headers=self.headers)
+        return resp.json()
+
     # ----------------- FILE/URL ANALYSIS REPORT -----------------
     def get_analysis(self, analysis_id: str):
         response = requests.get(f"{p.BASE_URL}/analyses/{analysis_id}", headers=self.headers)
