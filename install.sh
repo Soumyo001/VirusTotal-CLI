@@ -5,7 +5,7 @@ VENV_DIR="$HOME/.vtcli"
 
 if [ -f /etc/os-release ]; then
     . /etc/os-release
-    DISTRO=$ID
+    DISTRO=$(echo "$ID" | tr '[:upper:]' '[:lower:]')
 else
     echo "❌ Cannot detect Linux Distro. Exiting..."
     exit 1
@@ -28,36 +28,73 @@ else
 fi
 
 echo "✅ Detected: $PRETTY_NAME"
+echo ""
 
-echo "📦 Installing Python and required packages..."
+echo "📦 Installing Python and required tools..."
 $UPDATE_CMD
 
 if [ "$PKG_MGR" = "apt" ]; then
     $INSTALL_CMD python3 python3-pip python3-venv git
-elif [ "$PKG_MGR" = "pacman" ]; thens
+elif [ "$PKG_MGR" = "pacman" ]; then
     $INSTALL_CMD python python-pip git
 fi
 
-if [ ! -d "$VENV_DIR" ]; then
-    echo "🧱 Creating Python virtual environment..."
-    python3 -m venv "$VENV_DIR" 2>/dev/null || python -m venv "$VENV_DIR"
-fi
-source "$VENV_DIR/bin/activate"
+SCRIPT_PATH="$(realpath "$0")"
+PROJECT_DIR="$(dirname "$SCRIPT_PATH")"
+echo "📁 Detected project directory: $PROJECT_DIR"
 
-if [ -f "requirements.txt" ]; then
+if [ ! -d "$VENV_DIR" ]; then
+    echo "🧱 Creating virtual environment directory: $VENV_DIR"
+    mkdir -p "$VENV_DIR"
+fi
+
+if [ "$PROJECT_DIR" = "$VENV_DIR" ]; then
+    echo "⚠ Project already in $VENV_DIR — skipping move."
+else
+    echo "📦 Moving project files to $VENV_DIR..."
+    rsync -a --exclude ".git" --exclude ".venv" "$PROJECT_DIR/" "$VENV_DIR/"
+    if [ $? -ne 0 ]; then
+        echo "❌ Error: Failed to copy project files. Exiting without deleting original folder."
+        exit 1
+    fi
+    echo "✅ Files copied successfully."
+
+    echo "🧹 Cleaning up old project directory..."
+    rm -rf "$PROJECT_DIR"
+fi
+
+
+if [ ! -d "$VENV_DIR/venv" ]; then
+    echo "🧱 Creating Python virtual environment..."
+    python3 -m venv "$VENV_DIR/venv" 2>/dev/null || python -m venv "$VENV_DIR/venv"
+else
+    echo "Virtual environment already exists at $VENV_DIR"
+fi
+
+
+
+source "$VENV_DIR/venv/bin/activate" || {
+    echo "❌ Failed to activate virtual environment."
+    exit 1
+}
+
+# --- Install dependencies ---
+if [ -f "$VENV_DIR/requirements.txt" ]; then
     echo "📦 Installing Python dependencies..."
-    pip install --upgrade pip
+    pip install --upgrade pip setuptools wheel
     pip install -r requirements.txt
 else
     echo "⚠ No requirements.txt found, skipping dependency installation."
 fi
 
+BASH_PATH=$(which bash)
+
 if [ -f "main.py" ]; then
     echo "⚙ Setting up global command 'vt'..."
     cat <<EOF > vt
-#!/usr/bin/env bash
-cd "$(pwd)"
-source "$VENV_DIR/bin/activate"
+#!$BASH_PATH
+cd "$VENV_DIR"
+source "$VENV_DIR/venv/bin/activate"
 python3 main.py "\$@"
 EOF
 
