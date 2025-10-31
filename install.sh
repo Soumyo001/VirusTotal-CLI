@@ -78,7 +78,6 @@ source "$VENV_DIR/venv/bin/activate" || {
     exit 1
 }
 
-# --- Install dependencies ---
 if [ -f "$VENV_DIR/requirements.txt" ]; then
     echo "📦 Installing Python dependencies..."
     pip install --upgrade pip setuptools wheel
