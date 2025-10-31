@@ -52,7 +52,7 @@ if [ "$PROJECT_DIR" = "$VENV_DIR" ]; then
     echo "⚠ Project already in $VENV_DIR — skipping move."
 else
     echo "📦 Moving project files to $VENV_DIR..."
-    rsync -a --exclude ".git" --exclude ".venv" "$PROJECT_DIR/" "$VENV_DIR/"
+    rsync -a --exclude ".git" "$PROJECT_DIR/" "$VENV_DIR/"
     if [ $? -ne 0 ]; then
         echo "❌ Error: Failed to copy project files. Exiting without deleting original folder."
         exit 1
