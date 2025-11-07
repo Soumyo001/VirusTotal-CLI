@@ -57,7 +57,7 @@ else
         echo "❌ Error: Failed to copy project files. Exiting without deleting original folder."
         exit 1
     fi
-    cd..
+    cd "$VENV_DIR"
     echo "✅ Files copied successfully."
 
     echo "🧹 Cleaning up old project directory..."
