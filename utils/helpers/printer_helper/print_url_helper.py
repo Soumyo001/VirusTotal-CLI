@@ -4,6 +4,7 @@ from rich.panel import Panel
 from rich.align import Align
 from datetime import datetime, timezone
 from data.api_constants import URLAnalysis as ua, Response as r
+import json
 
 console = Console()
 
@@ -16,7 +17,7 @@ def _ts_to_human(ts):
 
 def print_url_details(data, json_output=False, show_headers=False, show_engines=False):
     if json_output:
-        console.print_json(data)
+        console.print_json(json.dumps(data))
         return
 
     # Handle API error
