@@ -151,7 +151,7 @@ class VTCLI:
         if args.command == "update":
             self.update_handler.handle_update()
             return
-        self.update_handler.check_for_updates(__version__, display_update_message=True)
+        self.update_handler.check_for_updates(display_update_message=True)
 
         if args.command == "setup":
             save_api_key(args.apikey)
