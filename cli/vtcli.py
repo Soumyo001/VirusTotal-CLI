@@ -1,7 +1,8 @@
-import argparse, sys, os, subprocess, requests, shutil
+import argparse, sys, os
 from data.api_constants import Paths as p
-from data.constants import BANNER, VERSION_LINK
+from data.constants import BANNER
 from cli import __version__
+from utils.handlers.update_handler import UpdateHandler 
 from utils.helpers.key_helper import save_api_key, load_api_key, remove_api_key, display_api_key
 from utils.helpers.hash import compute_hashes
 from utils.helpers.url_to_vt_id_helper import url_to_vt_id
@@ -16,63 +17,8 @@ from api.api_client import VirusTotalClient
 class VTCLI:
     def __init__(self):
         self.project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        self.update_handler = UpdateHandler(self.project_root, __version__)
         self._parser = self._setup_cli()
-
-    def _check_for_updates(self, current_version, inline=False):
-        try:
-            resp = requests.get(VERSION_LINK, timeout=3)
-            latest_version = resp.text.strip()
-            if latest_version != current_version:
-                if inline:
-                    print(f"\n[!] Update available: {latest_version} (You have {current_version})")
-                    print("    Run: vt update\n")
-                return True
-            return False
-        except requests.RequestException as e:
-            print(f"[!] Could not check for updates: {e}")
-            return None
-
-    def _handle_update(self):
-        if shutil.which("git") is None:
-            print("[!] Git is not installed or not in PATH.")
-            print("    Please install Git to use the update command:")
-            print("    Ubuntu/Debian: sudo apt install git")
-            print("    Arch/Manjaro: sudo pacman -S git")
-            print("    Windows: https://git-scm.com/download/win")
-            return
-        
-        update_status = self._check_for_updates(__version__, inline=False)
-        if update_status is True:
-            print("[*] Update available")
-        elif update_status is False:
-            print("[✓] Already up to date")
-            return
-        else: 
-            print("[!] Update check failed, could not verify latest version.")
-            return
-
-        print("[*] Updating vt-cli...")
-
-        repo_dir = self.project_root
-
-        # get latest git commit
-        try:
-            subprocess.check_call(["git", "-C", repo_dir, "pull", "--rebase"])
-            print("[✓] Source code updated.")
-        except subprocess.CalledProcessError:
-            print("[!] Update failed: Could not pull latest code.")
-            print("    → Ensure this is a git clone, not a downloaded zip.")
-            return
-
-        # 2. Update dependencies
-        req_file = os.path.join(repo_dir, "requirements.txt")
-        try:
-            subprocess.check_call([sys.executable, "-m", "pip", "install", "--upgrade", "-r", req_file])
-            print("[✓] Dependencies updated.")
-        except subprocess.CalledProcessError:
-            print("[!] Dependency update encountered issues (continuing...).")
-
-        print("\n[✓] vt-cli is now up to date.\n")
 
     def _setup_cli(self):
         parser = argparse.ArgumentParser(
@@ -203,9 +149,9 @@ class VTCLI:
         print(BANNER)
 
         if args.command == "update":
-            self._handle_update()
+            self.update_handler.handle_update()
             return
-        self._check_for_updates(__version__, inline=True)
+        self.update_handler.check_for_updates(__version__, display_update_message=True)
 
         if args.command == "setup":
             save_api_key(args.apikey)

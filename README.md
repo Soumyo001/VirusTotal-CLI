@@ -173,9 +173,13 @@ VirusTotal-CLI/
 │   │     ├─ print_url_helper.py
 │   │     └─ print_file_helper.py
 │   │
-│   └─ validators/
-│      ├─ __init__.py
-│      └─ url_validator.py        # Validates input URLs
+│   ├─ validators/
+│   │   ├─ __init__.py
+│   │   └─ url_validator.py       # Validates input URLs
+│   │
+│   └─ handlers/
+│       ├─ __init__.py
+│       └─ update_handler.py      # Handles CLI update functionality
 │
 ├─ install.sh                     # Linux installer (Deb/Ubuntu/Kali/Arch)
 ├─ install.ps1                    # Windows installer (Coming soon)
