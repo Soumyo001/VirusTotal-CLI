@@ -35,4 +35,4 @@ HELP_MENU = """
                 [*] vt account info
                 [*] vt account quota
 """
-VERSION_LINK = "https://raw.githubusercontent.com/Soumyo001/VirusTotal-CLI/refs/heads/main/version.txt"
+VERSION_LINK = "https://github.com/Soumyo001/VirusTotal-CLI/raw/refs/heads/main/version.txt"
