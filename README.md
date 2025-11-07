@@ -198,7 +198,7 @@ VirusTotal-CLI/
 
 ## Development
 
-- Python 3.10+ required.
+- Python 3.12+ required.
 - Dependencies listed in `requirements.txt`.
 - Recommended workflow: git clone → virtual environment → install dependencies.
 
