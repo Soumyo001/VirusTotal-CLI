@@ -188,7 +188,7 @@ VirusTotal-CLI/
 
 > ### 🔐 API Key Storage
 > VirusTotal-CLI **securely stores** your API key in your system user configuration directory.
-> No manual setup is required — the directory is created automatically on first use.
+> No manual setup is required — the directory is created automatically on first use with proper rights.
 
 ---
 
