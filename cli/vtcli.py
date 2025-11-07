@@ -1,6 +1,7 @@
-import argparse, sys
+import argparse, sys, os, subprocess, requests, shutil
 from data.api_constants import Paths as p
-from data.constants import BANNER
+from data.constants import BANNER, RELEASE_LINK
+from cli import __version__
 from utils.helpers.key_helper import save_api_key, load_api_key, remove_api_key, display_api_key
 from utils.helpers.hash import compute_hashes
 from utils.helpers.url_to_vt_id_helper import url_to_vt_id
@@ -14,14 +15,56 @@ from api.api_client import VirusTotalClient
 
 class VTCLI:
     def __init__(self):
-        self.parser = self._setup_cli()
+        self.project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        self._parser = self._setup_cli()
+
+    def _check_for_updates(self, current_version):
+        try:
+            resp = requests.get(RELEASE_LINK, timeout=3)
+            latest = resp.json()["tag_name"]
+            if latest != current_version:
+                print(f"\n[!] Update available: {latest} (You have {current_version})")
+                print("    Run: vt update\n")
+        except:
+            pass
+
+    def _handle_update(self):
+        if shutil.which("git") is None:
+            print("[!] Git is not installed or not in PATH.")
+            print("    Please install Git to use the update command:")
+            print("    Ubuntu/Debian: sudo apt install git")
+            print("    Arch/Manjaro: sudo pacman -S git")
+            print("    Windows: https://git-scm.com/download/win")
+            return
+        print("[*] Updating vt-cli...")
+
+        repo_dir = self.project_root
+
+        # get latest git commit
+        try:
+            subprocess.check_call(["git", "-C", repo_dir, "pull", "--rebase"])
+            print("[✓] Source code updated.")
+        except subprocess.CalledProcessError:
+            print("[!] Update failed: Could not pull latest code.")
+            print("    → Ensure this is a git clone, not a downloaded zip.")
+            return
+
+        # 2. Update dependencies
+        req_file = os.path.join(repo_dir, "requirements.txt")
+        try:
+            subprocess.check_call([sys.executable, "-m", "pip", "install", "--upgrade", "-r", req_file])
+            print("[✓] Dependencies updated.")
+        except subprocess.CalledProcessError:
+            print("[!] Dependency update encountered issues (continuing...).")
+
+        print("\n[✓] vt-cli is now up to date.\n")
 
     def _setup_cli(self):
         parser = argparse.ArgumentParser(
             prog='vt',
             description="VirusTotal CLI Tool — Access VirusTotal API from terminal"
         )
-
+        parser.add_argument("-v", "--version", action="version", version=f"VirusTotal-CLI {__version__}")
         subparsers = parser.add_subparsers(dest="command", help="Main command categories")
 
         # setup api key commands
@@ -113,6 +156,9 @@ class VTCLI:
         account_info = account_sub.add_parser("info", help="Get current user info")
         account_info.add_argument("--json", action="store_true")
 
+        # update tool
+        update_parser = subparsers.add_parser("update", help="Update the CLI tool to latest version")
+
         # get analysis
         analysis_parser = subparsers.add_parser("analysis", help="Get file/URL analysis result")
         analysis_sub = analysis_parser.add_subparsers(dest="action", help="Analysis for file/URL")
@@ -138,7 +184,8 @@ class VTCLI:
         return parser
 
     def run(self):
-        args = self.parser.parse_args()
+        args = self._parser.parse_args()
+        self._check_for_updates(__version__)
 
         if args.command == "setup":
             save_api_key(args.apikey)
@@ -165,6 +212,9 @@ class VTCLI:
         if not key:
             print("[✗] Please set up your API key first using 'vt setup --apikey <your_key>'.")
             sys.exit(1)
+
+        if args.command == "update":
+            self._handle_update()
 
         if args.command == "file":
             if args.action == "scan":

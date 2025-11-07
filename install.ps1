@@ -44,7 +44,8 @@ if( -not(Test-Path -Path "$VENV_DIR\venv" -PathType Container) ){
 
 Write-Host "🔧 Activating virtual environment..." -ForegroundColor Cyan
 try {
-    powershell.exe -ExecutionPolicy Bypass -NoExit -Command "& '$VENV_DIR\venv\Scripts\activate.ps1'"
+    # powershell.exe -ExecutionPolicy Bypass -NoExit -Command "& '$VENV_DIR\venv\Scripts\activate.ps1'"
+    powershell -ExecutionPolicy Bypass -Command ". '$VENV_DIR\venv\Scripts\activate.ps1'; pwsh"
 } catch {
     Write-Host "Error Activating Virtual Environment: $($_.Exception.Message)" -ForegroundColor Red
     exit 1
