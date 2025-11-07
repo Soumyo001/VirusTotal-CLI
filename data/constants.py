@@ -35,4 +35,4 @@ HELP_MENU = """
                 [*] vt account info
                 [*] vt account quota
 """
-RELEASE_LINK = "https://api.github.com/repos/soumyo001/VirusTotal-CLI/releases/latest"
+VERSION_LINK = "https://raw.githubusercontent.com/soumyo001/VirusTotal-CLI/main/version.txt"

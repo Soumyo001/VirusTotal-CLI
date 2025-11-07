@@ -23,7 +23,7 @@ Write-Host "📁 Detected project directory: $PROJECT_DIR" -ForegroundColor Gree
 
 if( $DIR_PATH -ne $VENV_DIR ){
     Write-Host "📦 Moving project files to $VENV_DIR..." -ForegroundColor Cyan
-    Get-ChildItem -Path $DIR_PATH -Force | Where-Object {$_ -ne ".git"} | Move-Item -Destination $VENV_DIR -Force
+    Get-ChildItem -Path $DIR_PATH -Force | Move-Item -Destination $VENV_DIR -Force
     Write-Host "✅ Files copied successfully." -ForegroundColor Green
     Set-Location -Path $VENV_DIR
 

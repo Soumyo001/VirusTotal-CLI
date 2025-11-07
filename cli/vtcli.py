@@ -1,6 +1,6 @@
 import argparse, sys, os, subprocess, requests, shutil
 from data.api_constants import Paths as p
-from data.constants import BANNER, RELEASE_LINK
+from data.constants import BANNER, VERSION_LINK
 from cli import __version__
 from utils.helpers.key_helper import save_api_key, load_api_key, remove_api_key, display_api_key
 from utils.helpers.hash import compute_hashes
@@ -18,15 +18,19 @@ class VTCLI:
         self.project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
         self._parser = self._setup_cli()
 
-    def _check_for_updates(self, current_version):
+    def _check_for_updates(self, current_version, inline=False):
         try:
-            resp = requests.get(RELEASE_LINK, timeout=3)
-            latest = resp.json()["tag_name"]
-            if latest != current_version:
-                print(f"\n[!] Update available: {latest} (You have {current_version})")
-                print("    Run: vt update\n")
-        except:
-            pass
+            resp = requests.get(VERSION_LINK, timeout=3)
+            latest_version = resp.text.strip()
+            if latest_version != current_version:
+                if inline:
+                    print(f"\n[!] Update available: {latest_version} (You have {current_version})")
+                    print("    Run: vt update\n")
+                return True
+            return False
+        except requests.RequestException as e:
+            print(f"[!] Could not check for updates: {e}")
+            return None
 
     def _handle_update(self):
         if shutil.which("git") is None:
@@ -36,6 +40,17 @@ class VTCLI:
             print("    Arch/Manjaro: sudo pacman -S git")
             print("    Windows: https://git-scm.com/download/win")
             return
+        
+        update_status = self._check_for_updates(__version__, inline=False)
+        if update_status is True:
+            print("[*] Update available")
+        elif update_status is False:
+            print("[✓] Already up to date")
+            return
+        else: 
+            print("[!] Update check failed, could not verify latest version.")
+            return
+
         print("[*] Updating vt-cli...")
 
         repo_dir = self.project_root
@@ -185,7 +200,7 @@ class VTCLI:
 
     def run(self):
         args = self._parser.parse_args()
-        self._check_for_updates(__version__)
+        self._check_for_updates(__version__, inline=True)
 
         if args.command == "setup":
             save_api_key(args.apikey)
