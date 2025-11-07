@@ -184,8 +184,14 @@ VirusTotal-CLI/
 ├─ VERSION                        # Current CLI version (used in auto-update)
 └─ README.md
 ```
+---
+
+> ### 🔐 API Key Storage
+> VirusTotal-CLI **securely stores** your API key in your system user configuration directory.
+> No manual setup is required — the directory is created automatically on first use.
 
 ---
+
 ## Development
 
 - Python 3.10+ required.
