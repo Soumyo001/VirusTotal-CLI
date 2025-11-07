@@ -67,6 +67,11 @@ class VTCLI:
         parser.add_argument("-v", "--version", action="version", version=f"VirusTotal-CLI {__version__}")
         subparsers = parser.add_subparsers(dest="command", help="Main command categories")
 
+        # dummy
+        dum = subparsers.add_parser("dummy", help="LOL")
+        dum_sub = dum.add_subparsers(dest="action")
+        dum_sub.add_parser("xD")
+
         # setup api key commands
         setup_parser = subparsers.add_parser("setup", help= "Setup your VirusTotal API key")
         setup_parser.add_argument("--apikey", required=True, help="Your VirusTotal API key")
