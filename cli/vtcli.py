@@ -283,4 +283,4 @@ class VTCLI:
             elif args.action == "ip":
                 print_ip_details(response, json_output=args.json)
 
-        else: self.parser.print_help()
+        else: self._parser.print_help()
