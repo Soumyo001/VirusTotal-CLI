@@ -1,3 +1,4 @@
+<hr />
 
 ```bash
  █████   █████ ███████████              █████████  █████       █████
@@ -9,13 +10,16 @@
     ░░███         █████               ░░█████████  ███████████ █████
      ░░░         ░░░░░                 ░░░░░░░░░  ░░░░░░░░░░░ ░░░░░ 
 ```
+<hr />
+
 # VirusTotal CLI Tool
 
-[![Python](https://img.shields.io/badge/python-3.10%2B-blue)](https://www.python.org/)  
+[![Python](https://img.shields.io/badge/python-3.12%2B-blue)](https://www.python.org/)  
 [![License](https://img.shields.io/badge/BSD-3-Clause)](LICENSE)
 
-A **fast, modern and user-friendly** command-line interface for interacting with the **VirusTotal API**.  
+A **fast, modern and user-friendly** command-line interface for interacting with the **VirusTotal v3 API**.  
 Designed for **security researchers**, **malware analysts**, and **DFIR / SOC** workflows — directly from the terminal.
+Scan files/URLs, fetch intelligence for domains and IPs, inspect account quotas, and self-update with a single command.
 
 ---
 
