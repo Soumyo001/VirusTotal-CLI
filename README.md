@@ -206,26 +206,18 @@ pip install -r requirements.txt
 Contributions are welcome! Please:
 
 1. Fork the repository.
-    
 2. Create a feature branch (`git checkout -b feature-name`).
-    
 3. Commit your changes (`git commit -m "Feature description"`).
-    
 4. Push the branch (`git push origin feature-name`).
-    
 5. Open a Pull Request.
 
 ---
 ## Roadmap / Future Work
 
 - Windows installer and update support (complete PowerShell UX)
-
 - Packaged executables (PyInstaller / MSI)
-
 - Official PyPI package & Homebrew tap for easier install
-
 - More VirusTotal endpoints (private collections, retrohunt, intelligence)
-
 - CI: tests + release automation (GitHub Actions)
 
 ---
