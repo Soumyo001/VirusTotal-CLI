@@ -57,6 +57,7 @@ else
         echo "❌ Error: Failed to copy project files. Exiting without deleting original folder."
         exit 1
     fi
+    cd "$VENV_DIR"
     echo "✅ Files copied successfully."
 
     echo "🧹 Cleaning up old project directory..."
@@ -81,7 +82,7 @@ source "$VENV_DIR/venv/bin/activate" || {
 if [ -f "$VENV_DIR/requirements.txt" ]; then
     echo "📦 Installing Python dependencies..."
     pip install --upgrade pip setuptools wheel
-    pip install -r requirements.txt
+    pip install -r "$VENV_DIR/requirements.txt"
 else
     echo "⚠ No requirements.txt found, skipping dependency installation."
 fi
@@ -92,9 +93,8 @@ if [ -f "main.py" ]; then
     echo "⚙ Setting up global command 'vt'..."
     cat <<EOF > vt
 #!$BASH_PATH
-cd "$VENV_DIR"
 source "$VENV_DIR/venv/bin/activate"
-python3 main.py "\$@"
+python3 "$VENV_DIR/main.py" "\$@"
 EOF
 
     chmod +x vt
