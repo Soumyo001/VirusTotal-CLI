@@ -172,7 +172,7 @@ class VTCLI:
         account_info.add_argument("--json", action="store_true")
 
         # update tool
-        update_parser = subparsers.add_parser("update", help="Update the CLI tool to latest version")
+        subparsers.add_parser("update", help="Update the CLI tool to latest version")
 
         # get analysis
         analysis_parser = subparsers.add_parser("analysis", help="Get file/URL analysis result")
