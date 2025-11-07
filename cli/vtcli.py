@@ -195,6 +195,8 @@ class VTCLI:
         if args.command == "setup":
             save_api_key(args.apikey)
             sys.exit(0)
+        if args.command == "dummy":
+            if args.action == "xD": print("CONGRATULATIONS!")
 
         if args.command == "key":
             if args.action == "remove":
