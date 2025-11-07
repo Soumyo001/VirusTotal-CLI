@@ -4,6 +4,4 @@ rich
 argparse
 prettytable
 validators
-sys 
-subprocess 
 shutil
