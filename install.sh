@@ -89,7 +89,7 @@ fi
 
 BASH_PATH=$(which bash)
 
-if [ -f "main.py" ]; then
+if [ -f "$VENV_DIR/main.py" ]; then
     echo "⚙ Setting up global command 'vt'..."
     cat <<EOF > vt
 #!$BASH_PATH
