@@ -200,6 +200,10 @@ class VTCLI:
 
     def run(self):
         args = self._parser.parse_args()
+
+        if args.command == "update":
+            self._handle_update()
+            return
         self._check_for_updates(__version__, inline=True)
 
         if args.command == "setup":
@@ -228,10 +232,7 @@ class VTCLI:
             print("[✗] Please set up your API key first using 'vt setup --apikey <your_key>'.")
             sys.exit(1)
 
-        if args.command == "update":
-            self._handle_update()
-
-        elif args.command == "file":
+        if args.command == "file":
             if args.action == "scan":
                 # print(f"file scan command: {args.path} {args.json}")
                 response = vt.scan_file(args.path)
