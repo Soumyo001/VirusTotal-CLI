@@ -3,3 +3,4 @@ colorama
 rich
 argparse
 prettytable
+validators
