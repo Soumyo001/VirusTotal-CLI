@@ -200,6 +200,7 @@ class VTCLI:
 
     def run(self):
         args = self._parser.parse_args()
+        print(BANNER)
 
         if args.command == "update":
             self._handle_update()
@@ -226,7 +227,6 @@ class VTCLI:
 
         key = load_api_key()
         vt = VirusTotalClient(key)
-        print(BANNER)
 
         if not key:
             print("[✗] Please set up your API key first using 'vt setup --apikey <your_key>'.")
