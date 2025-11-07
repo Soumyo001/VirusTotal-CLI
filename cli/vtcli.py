@@ -67,11 +67,6 @@ class VTCLI:
         parser.add_argument("-v", "--version", action="version", version=f"VirusTotal-CLI {__version__}")
         subparsers = parser.add_subparsers(dest="command", help="Main command categories")
 
-        # dummy
-        dum = subparsers.add_parser("dummy", help="LOL")
-        dum_sub = dum.add_subparsers(dest="action")
-        dum_sub.add_parser("xD")
-
         # setup api key commands
         setup_parser = subparsers.add_parser("setup", help= "Setup your VirusTotal API key")
         setup_parser.add_argument("--apikey", required=True, help="Your VirusTotal API key")
@@ -195,8 +190,6 @@ class VTCLI:
         if args.command == "setup":
             save_api_key(args.apikey)
             sys.exit(0)
-        if args.command == "dummy":
-            if args.action == "xD": print("CONGRATULATIONS!")
 
         if args.command == "key":
             if args.action == "remove":
@@ -223,7 +216,7 @@ class VTCLI:
         if args.command == "update":
             self._handle_update()
 
-        if args.command == "file":
+        elif args.command == "file":
             if args.action == "scan":
                 # print(f"file scan command: {args.path} {args.json}")
                 response = vt.scan_file(args.path)
