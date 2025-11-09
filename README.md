@@ -88,9 +88,9 @@ powershell -Executionpolicy Bypass .\install.ps1
 
 ```bash
 vt setup --apikey <YOUR_API_KEY>          # Setup your VirusTotal API key
-vt key show                              # Show stored API key
+vt key show                               # Show stored API key
 vt key remove                             # Remove API key with warning
-vt key remove --force                      # Remove API key without warning
+vt key remove --force                     # Remove API key without warning
 ```
 
 ### File Operations
