@@ -18,6 +18,8 @@ class VirusTotalClient():
         max_regular = 32 * 1024 * 1024
         max_large = 650 * 1024 * 1024
 
+        print(f"[+] File: {os.path.basename(file_path)} ({file_size / (1024*1024):.2f} MB)")
+
         if file_size <= max_regular:
             with open(file_path, "rb") as f:
                 files = {"file" : (os.path.basename(file_path), f)}
@@ -25,6 +27,9 @@ class VirusTotalClient():
             return response.json()
         
         elif file_size > max_regular and file_size <= max_large:
+            print("[!] Large file detected (> 32 MB).")
+            print("[*] Requesting large file upload URL from VirusTotal...")
+
             response = requests.get(f"{p.BASE_URL}/files/upload_url", headers=self.headers)
 
             upload_info = response.json()
@@ -32,6 +37,9 @@ class VirusTotalClient():
             if not upload_url:
                 return {"error": {"code": "Failed to get large file upload URL", "message": upload_info}}
             
+            print("[✓] Upload URL received.")
+            print("[*] Uploading large file to VirusTotal (this may take several minutes)...")
+
             with open(file_path, "rb") as f:
                 files = {"file": (os.path.basename(file_path), f)}
                 response = requests.post(upload_url, headers=self.headers, files=files)
@@ -45,6 +53,10 @@ class VirusTotalClient():
     
     def request_file_rescan(self, file_hash: str):
         response = requests.post(f"{p.BASE_URL}/files/{file_hash}/analyse", headers=self.headers)
+        return response.json()
+    
+    def get_file_behaviour(self, file_hash: str):
+        response = requests.get(f"{p.BASE_URL}/files/{file_hash}/behaviour_summary", headers=self.headers)
         return response.json()
     
     # ----------------- URL SCAN -----------------

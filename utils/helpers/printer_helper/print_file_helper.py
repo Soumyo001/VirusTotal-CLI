@@ -2,23 +2,24 @@ from rich.console import Console
 from rich.table import Table
 from rich.panel import Panel
 from rich.text import Text
+from utils.helpers.printer_helper.print_file_behaviour import print_file_behaviour
 import json
-from data.api_constants import FileAnalysis as fa
+from data.api_constants import FileAnalysis as fa, Response as res
 
 console = Console()
 
-def print_file_details(data, json_output=False):
+def print_file_details(data, behaviour_data=None, json_output=False):
     try:
         if json_output:
             console.print_json(json.dumps(data))
             return
 
         # === Error Handling ===
-        if "error" in data:
-            error = data["error"]
-            console.print(f"[bold red]✗ Error:[/bold red] {error.get('code', 'Unknown error')}")
-            if "message" in error:
-                console.print(f"[yellow]{error['message']}[/yellow]")
+        if res.ERROR in data:
+            error = data[res.ERROR]
+            console.print(f"[bold red]✗ Error:[/bold red] {error.get(res.ERROR_CODE, 'Unknown error')}")
+            if res.ERROR_MESSAGE in error:
+                console.print(f"[yellow]{error[res.ERROR_MESSAGE]}[/yellow]")
             return
 
         # === Has 'data' section ===
@@ -38,6 +39,14 @@ def print_file_details(data, json_output=False):
             if not attrs:
                 console.print_json(json.dumps(data))
                 return
+            
+            # --- Get Scan Status ---
+            status = str(attrs.get(fa.ATTRIBUTES_STATUS, 0))
+            if status.lower() == fa.ATTRIBUTES_STATUS_QUEUED:
+                status = "[bold red]queued[/bold red]"
+            elif status.lower() == fa.ATTRIBUTES_STATUS_COMPLETED:
+                status = "[bold green]completed[/bold green]"
+            else: status = f"[yellow]{status}[/yellow]"  
 
             # --- File Metadata ---
             overview = Table(title="File Overview", show_header=False)
@@ -49,6 +58,7 @@ def print_file_details(data, json_output=False):
             overview.add_row("MD5", attrs.get(fa.MD5, data.get(fa.FILE_META, {}).get(fa.FILE_META_INFO, {}).get(fa.MD5, "N/A")))
             overview.add_row("SHA1", attrs.get(fa.SHA1, data.get(fa.FILE_META, {}).get(fa.FILE_META_INFO, {}).get(fa.SHA1, "N/A")))
             overview.add_row("Reputation", str(attrs.get(fa.ATTRIBUTES_REPUTATION, 0)))
+            overview.add_row("Status", status)
             console.print(overview)
             console.print()
 
@@ -136,6 +146,12 @@ def print_file_details(data, json_output=False):
             permalink = d.get(fa.LINKS, {}).get(fa.LINKS_ITEM) or d.get(fa.LINKS, {}).get(fa.LINKS_SELF)
             if permalink:
                 console.print(f"[cyan]Permalink:[/] {permalink}")
+
+            # --- file behaviour if any ---
+            if behaviour_data:
+                console.print()   # spacing
+                print_file_behaviour(behaviour_data)
+
 
             return
 

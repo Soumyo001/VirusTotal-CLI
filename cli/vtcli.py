@@ -7,6 +7,7 @@ from utils.helpers.key_helper import save_api_key, load_api_key, remove_api_key,
 from utils.helpers.hash import compute_hashes
 from utils.helpers.url_to_vt_id_helper import url_to_vt_id
 from utils.helpers.printer_helper.print_file_helper import print_file_details
+from utils.helpers.printer_helper.print_file_behaviour import print_file_behaviour
 from utils.helpers.printer_helper.print_url_helper import print_url_details
 from utils.helpers.printer_helper.print_domain_helper import print_domain_details
 from utils.helpers.printer_helper.print_ip_helper import print_ip_details
@@ -65,6 +66,12 @@ class VTCLI:
         file_rescan = file_sub.add_parser("rescan", help="Request a file rescan by it's hash")
         file_rescan.add_argument("hash", help="file hash (MD5/SHA256)")
         file_rescan.add_argument("--json", action="store_true")
+
+        # file behaviour
+        file_behaviour = file_sub.add_parser("trace", help="Get a file's behaviour")
+        file_behaviour.add_argument("hash", help="file hash (MD5/SHA256)")
+        file_behaviour.add_argument("--all", action="store_true", help="Use this to get all data (No trauncates)")
+        file_behaviour.add_argument("--json", action="store_true")
 
         # url commands
         url_parser = subparsers.add_parser("url", help="URL related operations")
@@ -189,11 +196,15 @@ class VTCLI:
             elif args.action == "report":
                 # print(f"file scan report: {args.hash} {args.json}")
                 response = vt.get_file_report(args.hash)
-                print_file_details(response, args.json)
+                response2 = vt.get_file_behaviour(args.hash)
+                print_file_details(data=response, behaviour_data=response2, json_output=args.json)
             elif args.action == "rescan":
                 # print(f"file rescan: {args.hash} {args.json}")
                 response = vt.request_file_rescan(args.hash)
                 print_file_details(response, args.json)
+            elif args.action == "trace":
+                response = vt.get_file_behaviour(args.hash)
+                print_file_behaviour(response, json_output=args.json, show_all=args.all)
 
         elif args.command == "url":
             if args.action == "scan":
