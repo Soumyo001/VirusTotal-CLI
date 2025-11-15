@@ -185,7 +185,6 @@ def print_file_behaviour(data: dict, json_output: bool = False, show_all: bool =
         # ----------------- IP Traffic -----------------
         ip_traffic = d.get("ip_traffic", [])
         if ip_traffic:
-            # present unique destination IPs with a count of occurrences and ports observed
             ip_counter = Counter()
             ip_ports = defaultdict(set)
             for entry in ip_traffic:
