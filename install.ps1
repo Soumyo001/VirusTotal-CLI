@@ -1,5 +1,5 @@
 $APP_NAME="VirusTotal-CLI"
-$VENV_DIR="$env:userprofile/.vtcli"
+$VENV_DIR="$env:userprofile\.vtcli"
 
 if (-not (Test-Path -Path $VENV_DIR -PathType Container)) {
     Write-Host "🧱 Creating virtual environment directory: $VENV_DIR" -ForegroundColor Cyan
@@ -8,9 +8,8 @@ if (-not (Test-Path -Path $VENV_DIR -PathType Container)) {
 
 
 Write-Host "🔍 Checking Python installation..." -ForegroundColor Cyan
-$python = Get-Command python -ErrorAction SilentlyContinue
 
-if(-not $python){
+if(-not (Get-Command python -ErrorAction SilentlyContinue)){
     Write-Host "⚠ Python not found. Downloading Python..." -ForegroundColor Yellow
     Start-Process "https://www.python.org/downloads/windows/" -Wait
     Write-Host "Please install Python manually, then re-run this script." -ForegroundColor Yellow
@@ -42,19 +41,21 @@ if( -not(Test-Path -Path "$VENV_DIR\venv" -PathType Container) ){
     }
 }
 
-Write-Host "🔧 Activating virtual environment..." -ForegroundColor Cyan
-try {
-    # powershell.exe -ExecutionPolicy Bypass -NoExit -Command "& '$VENV_DIR\venv\Scripts\activate.ps1'"
-    powershell -ExecutionPolicy Bypass -Command ". '$VENV_DIR\venv\Scripts\activate.ps1'; pwsh"
-} catch {
-    Write-Host "Error Activating Virtual Environment: $($_.Exception.Message)" -ForegroundColor Red
-    exit 1
-}
+# Write-Host "🔧 Activating virtual environment..." -ForegroundColor Cyan
+# try {
+#     # powershell.exe -ExecutionPolicy Bypass -NoExit -Command "& '$VENV_DIR\venv\Scripts\activate.ps1'"
+#     powershell -ExecutionPolicy Bypass -Command ". '$VENV_DIR\venv\Scripts\activate.ps1'; powershell"
+# } catch {
+#     Write-Host "Error Activating Virtual Environment: $($_.Exception.Message)" -ForegroundColor Red
+#     exit 1
+# }
 
-if (Test-Path "requirements.txt") {
+$VENV_PYTHON = "$VENV_DIR\venv\Scripts\python.exe"
+
+if (Test-Path -Path "$VENV_DIR\requirements.txt" -PathType Container) {
     Write-Host "📦 Installing dependencies..." -ForegroundColor Cyan
-    pip install --upgrade pip
-    pip install -r requirements.txt
+    & $VENV_PYTHON -m pip install --upgrade pip
+    & $VENV_PYTHON -m pip install -r requirements.txt
 } else {
     Write-Host "⚠ requirements.txt not found. Skipping dependency installation." -ForegroundColor Yellow
 }
