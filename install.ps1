@@ -8,7 +8,7 @@ if (-not (Test-Path -Path $VENV_DIR -PathType Container)) {
 }
 
 
-Write-Host "🔍 Checking Python installation..." -ForegroundColor Cyan
+Write-Host "[*] Checking Python installation..." -ForegroundColor Cyan
 
 if(-not (Get-Command python -ErrorAction SilentlyContinue)){
     Write-Host "[-] Python not found. Downloading Python..." -ForegroundColor Yellow
@@ -19,7 +19,7 @@ if(-not (Get-Command python -ErrorAction SilentlyContinue)){
 
 $SCRIPT_PATH = $PSCommandPath
 $DIR_PATH = [System.IO.Path]::GetDirectoryName($SCRIPT_PATH)
-Write-Host "📁 Detected project directory: $PROJECT_DIR" -ForegroundColor Green
+Write-Host "[+] Detected project directory: $PROJECT_DIR" -ForegroundColor Green
 
 if( $DIR_PATH -ne $VENV_DIR ){
     Write-Host "[*] Moving project files to $VENV_DIR..." -ForegroundColor Cyan
@@ -46,7 +46,7 @@ if( -not(Test-Path -Path "$VENV_DIR\venv" -PathType Container) ){
 # $activate_script = "$VENV_DIR\venv\Scripts\Activate.ps1"
 # if (Test-Path -Path $activate_script -PathType Leaf) {
 #     try {
-#         Write-Host "🔧 Activating virtual environment for script..." -ForegroundColor Cyan
+#         Write-Host "[*] Activating virtual environment for script..." -ForegroundColor Cyan
 #         . $activate_script
 #     }catch {
 #         Write-Host "Error Activating Virtual Environment: $($_.Exception.Message)" -ForegroundColor Red
