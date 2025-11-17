@@ -20,7 +20,7 @@ Scan files/URLs, fetch intelligence for domains and IPs, inspect account quotas,
 - ✅ **API Key Management**  
   - `vt setup --apikey <API_KEY>`: Save your VirusTotal API key.  
   - `vt key show`: View your saved API key.  
-  - `vt key remove [--force]`: Remove your API key with optional confirmation bypass.
+  - `vt key remove [--force]`: Remove your API key with confirmation bypass.
 
 - ✅ **File Operations**  
   - Scan files (`vt file scan <path>`).  
@@ -68,6 +68,14 @@ chmod +x install.sh
 > The installer will create a Python virtual environment, install all dependencies, and set up the CLI.
 
 ### Windows (PowerShell)
+
+- **Set Executionpolicy to unrestricted**
+
+```powershell
+Set-ExecutionPolicy Unrestricted -Scope CurrentUser
+```
+
+- **Clone and run the script**
 
 ```powershell
 # Clone repository
@@ -182,7 +190,7 @@ VirusTotal-CLI/
 │       └─ update_handler.py      # Handles CLI update functionality
 │
 ├─ install.sh                     # Linux installer (Deb/Ubuntu/Kali/Arch)
-├─ install.ps1                    # Windows installer (Coming soon)
+├─ install.ps1                    # Windows installer
 ├─ requirements.txt               # Python dependencies
 ├─ main.py                        # Program entry point
 ├─ VERSION                        # Current CLI version (used in auto-update)
@@ -201,11 +209,11 @@ VirusTotal-CLI/
 - Python 3.12+ required.
 - Dependencies listed in `requirements.txt`.
 - Recommended workflow: git clone → virtual environment → install dependencies.
-
+- Inside project directory, run:
 ```bash
 python3 -m venv venv
 source venv/bin/activate      # Linux
-powershell -Executionpolicy Bypass ".\venv\Scripts\activate.ps1"     # Windows
+powershell -Executionpolicy Bypass ".\venv\Scripts\activate.ps1"     # Windows or just set executionpolicy to unrestricted and do .\venv\Scripts\activate.ps1
 pip install -r requirements.txt
 ```
 
