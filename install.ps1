@@ -59,7 +59,7 @@ if( -not(Test-Path -Path "$VENV_DIR\venv" -PathType Container) ){
 
 $VENV_PYTHON = "$VENV_DIR\venv\Scripts\python.exe"
 
-if (Test-Path -Path "$VENV_DIR\requirements.txt" -PathType Container) {
+if (Test-Path -Path "$VENV_DIR\requirements.txt" -PathType Leaf) {
     Write-Host "[+] Installing dependencies..." -ForegroundColor Cyan
     & $VENV_PYTHON -m pip install --upgrade pip
     & $VENV_PYTHON -m pip install -r requirements.txt
