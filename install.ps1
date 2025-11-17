@@ -1,5 +1,6 @@
 $APP_NAME="VirusTotal-CLI"
 $VENV_DIR="$env:userprofile\.vtcli"
+$env:PSExecutionPolicyPreference = 'Bypass'
 
 if (-not (Test-Path -Path $VENV_DIR -PathType Container)) {
     Write-Host "🧱 Creating virtual environment directory: $VENV_DIR" -ForegroundColor Cyan
@@ -34,6 +35,7 @@ if( -not(Test-Path -Path "$VENV_DIR\venv" -PathType Container) ){
     Write-Host "🧱 Creating Python virtual environment..." -ForegroundColor Cyan
     try {
         python -m venv "$VENV_DIR\venv"
+        Write-Host "✅ Virtual environment created." -ForegroundColor Green
     }
     catch {
         Write-Host "Error Creating python virtual environment: $($_.Exception.Message)" -ForegroundColor Red
@@ -41,12 +43,17 @@ if( -not(Test-Path -Path "$VENV_DIR\venv" -PathType Container) ){
     }
 }
 
-# Write-Host "🔧 Activating virtual environment..." -ForegroundColor Cyan
-# try {
-#     # powershell.exe -ExecutionPolicy Bypass -NoExit -Command "& '$VENV_DIR\venv\Scripts\activate.ps1'"
-#     powershell -ExecutionPolicy Bypass -Command ". '$VENV_DIR\venv\Scripts\activate.ps1'; powershell"
-# } catch {
-#     Write-Host "Error Activating Virtual Environment: $($_.Exception.Message)" -ForegroundColor Red
+# $activate_script = "$VENV_DIR\venv\Scripts\Activate.ps1"
+# if (Test-Path -Path $activate_script -PathType Leaf) {
+#     try {
+#         Write-Host "🔧 Activating virtual environment for script..." -ForegroundColor Cyan
+#         . $activate_script
+#     }catch {
+#         Write-Host "❌ Error Activating Virtual Environment: $($_.Exception.Message)" -ForegroundColor Red
+#         exit 1
+#     }
+# } else {
+#     Write-Host "❌ Activate script not found at $activate_script" -ForegroundColor Red
 #     exit 1
 # }
 
@@ -60,15 +67,16 @@ if (Test-Path -Path "$VENV_DIR\requirements.txt" -PathType Container) {
     Write-Host "⚠ requirements.txt not found. Skipping dependency installation." -ForegroundColor Yellow
 }
 
-Write-Host "⚙ Setting up global command 'vt'..." -ForegroundColor Cyan
+Write-Host "[+] Setting up global command 'vt'..." -ForegroundColor Cyan
 $shim = "$env:USERPROFILE\AppData\Local\Microsoft\WindowsApps\vt.cmd"
 
-@"
+$shim_content = @'
 @echo off
-call $VENV_DIR\venv\Scripts\activate.bat
-python "$VENV_DIR/main.py" %*
-"@ | Out-File $shim -Encoding ASCII
+call %USERPROFILE%\.vtcli\venv\Scripts\activate.bat
+python "%USERPROFILE%\.vtcli\main.py" %*
+'@
 
+$shim_content | Out-File $shim -Encoding ASCII
 
 Write-Host "✅ Installed global command: vt" -ForegroundColor Green
 Write-Host ""
