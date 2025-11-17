@@ -60,9 +60,16 @@ if( -not(Test-Path -Path "$VENV_DIR\venv" -PathType Container) ){
 $VENV_PYTHON = "$VENV_DIR\venv\Scripts\python.exe"
 
 if (Test-Path -Path "$VENV_DIR\requirements.txt" -PathType Leaf) {
-    Write-Host "[+] Installing dependencies..." -ForegroundColor Cyan
-    & $VENV_PYTHON -m pip install --upgrade pip
-    & $VENV_PYTHON -m pip install -r requirements.txt
+    try {
+        Write-Host "[+] Installing dependencies..." -ForegroundColor Cyan
+        & $VENV_PYTHON -m ensurepip --upgrade
+        & $VENV_PYTHON -m pip install --upgrade pip
+        & $VENV_PYTHON -m pip install -r requirements.txt
+    }
+    catch {
+        Write-Host "[!] Error creating virtual environment or installing pip: $($_.Exception.Message)" -ForegroundColor Red
+        exit 1
+    }
 } else {
     Write-Host "[-] requirements.txt not found. Skipping dependency installation." -ForegroundColor Yellow
 }
