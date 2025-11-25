@@ -43,7 +43,7 @@ class UninstallHandler:
 
     def _print_summary(self):
         print("\n==============================")
-        print("   UNINSTALL SUMMARY")
+        print("     UNINSTALL SUMMARY")
         print("==============================")
 
         if not self._failures:
