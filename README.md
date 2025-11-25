@@ -153,48 +153,49 @@ vt update
 
 ```bash
 VirusTotal-CLI/
-│
-├─ api/
-│   ├─ __init__.py
-│   └─ api_client.py              # Handles requests to VirusTotal API
-│
-├─ cli/
-│   ├─ __init__.py
-│   └─ cli.py                     # Main CLI command dispatcher
-│
-├─ data/
-│   ├─ __init__.py
-│   ├─ api_constants.py           # Endpoints, URLs, JSON response keys
-│   └─ constants.py               # Banners, labels, and common messages
-│
-├─ utils/
-│   ├─ __init__.py
-│   ├─ helpers/
-│   │  ├─ __init__.py
-│   │  ├─ hash.py                 # File hashing helper
-│   │  ├─ key_helper.py           # Local API key storage
-│   │  ├─ url_to_vt_id_helper.py  # Converts URL → VT URL ID format
-│   │  └─ printer_helper/
-│   │     ├─ print_user.py
-│   │     ├─ print_domain_helper.py
-│   │     ├─ print_ip_helper.py
-│   │     ├─ print_url_helper.py
-│   │     └─ print_file_helper.py
-│   │
-│   ├─ validators/
-│   │   ├─ __init__.py
-│   │   └─ url_validator.py       # Validates input URLs
-│   │
-│   └─ handlers/
-│       ├─ __init__.py
-│       └─ update_handler.py      # Handles CLI update functionality
-│
-├─ install.sh                     # Linux installer (Deb/Ubuntu/Kali/Arch)
-├─ install.ps1                    # Windows installer
-├─ requirements.txt               # Python dependencies
-├─ main.py                        # Program entry point
-├─ VERSION                        # Current CLI version (used in auto-update)
-└─ README.md
+├── api
+│   ├── api_client.py
+│   └── __init__.py
+├── cli
+│   ├── __init__.py
+│   └── vtcli.py
+├── data
+│   ├── api_constants.py
+│   ├── CHANGELOG.txt
+│   ├── constants.py
+│   └── __init__.py
+├── images
+│   └── photo.png
+├── __init__.py
+├── install.ps1
+├── install.sh
+├── LICENSE
+├── main.py
+├── README.md
+├── requirements.txt
+├── utils
+│   ├── handlers
+│   │   ├── uninstall_handler.py
+│   │   └── update_handler.py
+│   ├── helpers
+│   │   ├── get_home_dir.py
+│   │   ├── hash.py
+│   │   ├── __init__.py
+│   │   ├── key_helper.py
+│   │   ├── printer_helper
+│   │   │   ├── __init__.py
+│   │   │   ├── print_domain_helper.py
+│   │   │   ├── print_file_behaviour.py
+│   │   │   ├── print_file_helper.py
+│   │   │   ├── print_ip_helper.py
+│   │   │   ├── print_url_helper.py
+│   │   │   └── print_user.py
+│   │   └── url_to_vt_id_helper.py
+│   ├── __init__.py
+│   └── validators
+│       ├── __init__.py
+│       └── url_validator.py
+└── version.txt
 ```
 ---
 
