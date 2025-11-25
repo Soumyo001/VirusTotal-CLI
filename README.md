@@ -209,6 +209,16 @@ VirusTotal-CLI/
 - Python 3.12+ required.
 - Dependencies listed in `requirements.txt`.
 - Recommended workflow: git clone → virtual environment → install dependencies.
+- After any change, the version updates need to be in the following paths:
+```bash
+VirusTotal-CLI/version.txt
+VirusTotal-CLI/cli/__init__.py
+```
+- the update description should be in :
+```bash
+VirusTotal-CLI/data/CHANGELOG.txt
+```
+
 - Inside project directory, run:
 ```bash
 python3 -m venv venv

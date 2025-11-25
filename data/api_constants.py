@@ -3,8 +3,15 @@ import os, platform
 class Paths:
     if platform.system() == "Windows":
         CONFIG_PATH = os.path.join(os.environ["USERPROFILE"], ".config", "vtcli", "config.json")
+        LAST_SEEN_FILE = os.path.join(os.environ["USERPROFILE"], ".config", "vtcli", "last_seen.json")
+        SHIM_PATH = os.path.join(os.environ["USERPROFILE"], "AppData", "Local", "Microsoft", "WindowsApps", "vt.cmd")
+        VENV_DIR = os.path.join(os.environ["USERPROFILE"], ".vtcli")
     else:
         CONFIG_PATH = os.path.expanduser("~/.config/vtcli/config.json")
+        LAST_SEEN_FILE = os.path.expanduser("~/.config/vtcli/last_seen.json")
+        SHIM_PATH = "/usr/local/bin/vt"
+        VENV_DIR = os.path.expanduser("~/.vtcli")
+        
     BASE_URL = "https://www.virustotal.com/api/v3"
     API_KEY_ENTRY = "api_key"
 

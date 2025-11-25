@@ -12,7 +12,7 @@ BANNER = r"""
     ░░███         █████               ░░█████████  ███████████ █████
      ░░░         ░░░░░                 ░░░░░░░░░  ░░░░░░░░░░░ ░░░░░ 
 
-                          By Defalt4o4 - Follow the debugger's path!
+                          By defalt4o4 - Follow the debugger's path!
 
 """
 

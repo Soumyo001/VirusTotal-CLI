@@ -3,7 +3,8 @@ from data.api_constants import Paths as p
 from data.constants import BANNER
 from cli import __version__
 from utils.handlers.update_handler import UpdateHandler 
-from utils.helpers.key_helper import save_api_key, load_api_key, remove_api_key, display_api_key
+from utils.handlers.uninstall_handler import UninstallHandler
+from utils.helpers.key_helper import KeyHelper
 from utils.helpers.hash import compute_hashes
 from utils.helpers.url_to_vt_id_helper import url_to_vt_id
 from utils.helpers.printer_helper.print_file_helper import print_file_details
@@ -18,7 +19,9 @@ from api.api_client import VirusTotalClient
 class VTCLI:
     def __init__(self):
         self.project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-        self.update_handler = UpdateHandler(self.project_root, __version__)
+        self._update_handler = UpdateHandler(self.project_root, __version__)
+        self._uninstall_handler = UninstallHandler()
+        self._key_helper = KeyHelper()
         self._parser = self._setup_cli()
 
     def _setup_cli(self):
@@ -28,6 +31,9 @@ class VTCLI:
         )
         parser.add_argument("-v", "--version", action="version", version=f"VirusTotal-CLI {__version__}")
         subparsers = parser.add_subparsers(dest="command", help="Main command categories")
+
+        # uninstall vtcli
+        parser.add_argument("--uninstall", "--remove", dest="uninstall", action="store_true", help="Uninstall VirusTotal-CLI")
 
         # setup api key commands
         setup_parser = subparsers.add_parser("setup", help= "Setup your VirusTotal API key")
@@ -154,31 +160,38 @@ class VTCLI:
     def run(self):
         args = self._parser.parse_args()
         print(BANNER)
+        self._update_handler.show_update_banner_once()        
+
+        if args.uninstall:
+            confirm = input("Are you sure you want to uninstall VirusTotal-CLI? (y/N): ").strip().lower()
+            if confirm in ['y', 'yes']:
+                self._uninstall_handler.uninstall()
+            sys.exit(0)
 
         if args.command == "update":
-            self.update_handler.handle_update()
+            self._update_handler.handle_update()
             return
-        self.update_handler.check_for_updates(display_update_message=True)
+        self._update_handler.check_for_updates(display_update_message=True)
 
         if args.command == "setup":
-            save_api_key(args.apikey)
+            self._key_helper.save_api_key(args.apikey)
             sys.exit(0)
 
         if args.command == "key":
             if args.action == "remove":
                 if args.force: 
-                    remove_api_key()
+                    self._key_helper.remove_api_key()
                 else: 
                     confirm = input("⚠ Are you sure you want to remove your VirusTotal API key? [y/N]: ").strip().lower()
                     if confirm in ['y', 'yes']: 
-                        remove_api_key()
+                        self._key_helper.remove_api_key()
                     else: 
                         print("✗ Operation cancelled. API key not removed.")
             elif args.action == "show":
-                display_api_key()
+                self._key_helper.display_api_key()
             sys.exit(0)
 
-        key = load_api_key()
+        key = self._key_helper.load_api_key()
         vt = VirusTotalClient(key)
 
         if not key:
