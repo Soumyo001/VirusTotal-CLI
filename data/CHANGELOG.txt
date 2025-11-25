@@ -1,6 +1,7 @@
-# Version 1.3.5
+# Version 1.3.6
 ---
 - Added one-time update notification!
 - Added uninstall command: vt --uninstall
 - Improved file report formatting
-- Faster API queries
+- fixed bugs
+- correct home directory is now fetched even under "sudo"

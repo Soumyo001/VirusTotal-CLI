@@ -1,17 +1,20 @@
 import os, platform
+from utils.helpers.get_home_dir import get_home_dir
 
 class Paths:
+    _HOME = get_home_dir()
+
     if platform.system() == "Windows":
-        CONFIG_PATH = os.path.join(os.environ["USERPROFILE"], ".config", "vtcli", "config.json")
-        LAST_SEEN_FILE = os.path.join(os.environ["USERPROFILE"], ".config", "vtcli", "last_seen.json")
-        SHIM_PATH = os.path.join(os.environ["USERPROFILE"], "AppData", "Local", "Microsoft", "WindowsApps", "vt.cmd")
-        VENV_DIR = os.path.join(os.environ["USERPROFILE"], ".vtcli")
+        _APPDATA = os.environ.get("APPDATA")
+        SHIM_PATH = os.path.join(_HOME, "AppData", "Local", "Microsoft", "WindowsApps", "vt.cmd")
+        CONFIG_PATH = os.path.join(_APPDATA, "vtcli", "config.json")
+        LAST_SEEN_FILE = os.path.join(_APPDATA, "vtcli", "last_seen.json")
     else:
-        CONFIG_PATH = os.path.expanduser("~/.config/vtcli/config.json")
-        LAST_SEEN_FILE = os.path.expanduser("~/.config/vtcli/last_seen.json")
-        SHIM_PATH = "/usr/local/bin/vt"
-        VENV_DIR = os.path.expanduser("~/.vtcli")
+        SHIM_PATH = "/usr/local/bin/vt" 
+        CONFIG_PATH = os.path.join(_HOME, ".config", "vtcli", "config.json")
+        LAST_SEEN_FILE = os.path.join(_HOME, ".config", "vtcli", "last_seen.json")
         
+    VENV_DIR = os.path.join(_HOME, ".vtcli")
     BASE_URL = "https://www.virustotal.com/api/v3"
     API_KEY_ENTRY = "api_key"
 
