@@ -1,4 +1,20 @@
-# Version 1.3.6
+# Version 1.4.0
+---
+- New command `vt ip resolve`
+    - Self public IP report: `vt ip resolve --self`
+    - Resolve url/domain IP: `vt ip resolve example.com`
+    - IPv6 support via `vt ip resolve example.com --ipv6`
+    - Automatically fetches VirusTotal reports for all resolved IPs
+- Bug Fixes
+    - Fixed duplicate IP report issue in resolver
+    - Fixed update check logic edge cases
+    - Fixed CLI parsing issues for optional arguments
+    - Fixed pip missing in venv scenarios during installation
+    - Fixed version mismatch confusion in update detection logic
+
+# Earlier versions
+
+## Version 1.3.6
 ---
 - Added one-time update notification!
 - Added uninstall command: vt --uninstall

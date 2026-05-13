@@ -7,6 +7,8 @@ from utils.handlers.uninstall_handler import UninstallHandler
 from utils.helpers.key_helper import KeyHelper
 from utils.helpers.hash import compute_hashes
 from utils.helpers.url_to_vt_id_helper import url_to_vt_id
+from utils.helpers.get_public_ip_helper import get_public_ip
+from utils.helpers.ip_resolve_helper import resolve_to_public_ip
 from utils.helpers.printer_helper.print_file_helper import print_file_details
 from utils.helpers.printer_helper.print_file_behaviour import print_file_behaviour
 from utils.helpers.printer_helper.print_url_helper import print_url_details
@@ -113,6 +115,13 @@ class VTCLI:
         # IP related command
         ip_parser = subparsers.add_parser("ip", help="IP intelligence")
         ip_sub = ip_parser.add_subparsers(dest="action", help="IP related commands")
+
+        ip_resolve = ip_sub.add_parser("resolve", help="Get IP details after resolving any url/domains etc")
+        ip_resolve.add_argument("url_or_domain", nargs="?", help="Can be url, domain")
+        ip_resolve.add_argument("--ipv6", action="store_true", help="Get IPv6 IP details")
+        ip_resolve.add_argument("--self", action="store_true", help="Get details about your public IP")
+        ip_resolve.add_argument("--json", action="store_true")
+
 
         ip_report = ip_sub.add_parser("report", help="Get previously scanned IP report")
         ip_report.add_argument("ip_address", help="IP address")
@@ -245,7 +254,21 @@ class VTCLI:
 
         elif args.command == "ip":
             # print(f"IP command: {args.ip_address} {args.json}")
-            if args.action == "report":
+            if args.action == "resolve":
+                if args.self and args.url_or_domain:
+                    self._parser.error("cannot use --self and url/domain at the same time (use --ipv6 with url/domain)")
+                elif args.self and args.ipv6:
+                    self._parser.error("--self and --ipv6 are separate arguemnts. --ipv6 can only be used with url/domain")
+                elif args.self:
+                    ips = get_public_ip()
+                elif args.url_or_domain:
+                    ips = resolve_to_public_ip(args.url_or_domain, include_ipv6=args.ipv6)
+                else:
+                    self._parser.error("you must provide either --self or a url/domain")
+                for ip in ips:
+                    response = vt.get_ip_report(ip)
+                    print_ip_details(response, json_output=args.json)
+            elif args.action == "report":
                 response = vt.get_ip_report(args.ip_address)
                 print_ip_details(response, json_output=args.json)
             elif args.action == "rescan":
