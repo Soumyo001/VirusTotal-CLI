@@ -35,6 +35,14 @@ Scan files/URLs, fetch intelligence for domains and IPs, inspect account quotas,
 - ✅ **Domain & IP Intelligence**  
   - Query domains (`vt domain report <domain_name>`).  
   - Query IP addresses (`vt ip report <ip_address>`).
+  - Resolve domains/URLs to public IPs (`vt ip resolve <target>`).  
+  - Fetch your own public IP and analyze it (`vt ip resolve --self`).  
+  - Optional IPv6 resolution support (`--ipv6`).  
+
+- ✅ **Advanced IP Resolution**
+  - Automatically resolves domains, URLs, and inputs to public IPs.
+  - Filters out private, loopback, and invalid IP addresses.
+  - Handles multiple DNS records and deduplicates results.
 
 - ✅ **User Account Information**  
   - `vt account info`: Get account details (email, API key, quotas, privileges).  
@@ -45,9 +53,15 @@ Scan files/URLs, fetch intelligence for domains and IPs, inspect account quotas,
 - ✅ **Automatic Updates**  
   - `vt update`: Check for the latest version and update the CLI automatically.  
   - Handles Git detection and Python dependencies.
+  - One-time update changelog notification after upgrade.
 
 - ✅ **Cross-Platform Support**  
   - Works on Linux (Debian/Ubuntu/Kali/Arch) and Windows (PowerShell).
+
+---
+
+- ✅ **System Utilities**
+  - Uninstall CLI safely (`vt --uninstall` or `vt --remove`).
 
 ---
 
@@ -124,9 +138,20 @@ vt domain rescan example.com
 ```
 
 ### IP
+
 ```bash
 vt ip report 8.8.8.8
 vt ip rescan 8.8.8.8
+
+# Resolve domain/URL to public IP(s) and fetch report
+vt ip resolve example.com
+vt ip resolve https://example.com
+
+# Get your own public IP report
+vt ip resolve --self
+
+# Include IPv6 addresses
+vt ip resolve example.com --ipv6
 ```
 
 ### Account Info & Quotas
@@ -146,7 +171,14 @@ vt analysis <analysis_id> [--json]        # Get analysis details
 ```bash
 vt update
 ```
+> After updating, the CLI will display a **one-time summary of new features**.
 
+### Uninstall CLI
+
+```bash
+vt --uninstall
+vt --remove
+```
 ---
 
 ## Project Structure
@@ -179,8 +211,10 @@ VirusTotal-CLI/
 │   │   └── update_handler.py
 │   ├── helpers
 │   │   ├── get_home_dir.py
+│   │   ├── get_public_ip_helper.py
 │   │   ├── hash.py
 │   │   ├── __init__.py
+│   │   ├── ip_resolve_helper.py
 │   │   ├── key_helper.py
 │   │   ├── printer_helper
 │   │   │   ├── __init__.py
