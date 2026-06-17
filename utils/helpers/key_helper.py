@@ -15,16 +15,16 @@ class KeyHelper():
             json.dump({self.api_key_entry: key}, f)
         print("[✓] API key saved successfully.")
 
-    def load_api_key(self) -> str:
+    def load_api_key(self) -> str|None:
         if not os.path.exists(self.config_path):
-            print("[!] API key not found. Please run 'vt setup --apikey <APIKEY>' first.")
-            sys.exit(1)
+            print("[!] API key not found.")
+            return None
 
         with open(self.config_path, "r", encoding='utf-8') as f:
             key = json.load(f).get(self.api_key_entry)
             if not key:
-                print("[!] API key entry missing in config file. Please re-run 'vt setup --apikey <KEY>' to initialize api key")
-                sys.exit(1)
+                print("[!] API key entry missing in config file.")
+                return None
             return key
 
     def remove_api_key(self) -> bool:

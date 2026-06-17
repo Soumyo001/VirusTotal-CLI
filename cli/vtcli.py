@@ -201,11 +201,11 @@ class VTCLI:
             sys.exit(0)
 
         key = self._key_helper.load_api_key()
-        vt = VirusTotalClient(key)
-
         if not key:
             print("[✗] Please set up your API key first using 'vt setup --apikey <your_key>'.")
             sys.exit(1)
+        
+        vt = VirusTotalClient(key)
 
         if args.command == "file":
             if args.action == "scan":
