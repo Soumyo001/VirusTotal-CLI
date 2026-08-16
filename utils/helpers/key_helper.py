@@ -11,9 +11,14 @@ class KeyHelper():
     def save_api_key(self, key:str):
         os.makedirs(os.path.dirname(self.config_path), exist_ok=True)
 
-        with open(self.config_path, "w", encoding='utf-8') as f:
-            json.dump({self.api_key_entry: key}, f)
-        print("[✓] API key saved successfully.")
+        try:
+            with open(self.config_path, "w", encoding='utf-8') as f:
+                json.dump({self.api_key_entry: key}, f)
+            if os.name == "posix":
+                os.chmod(self.config_path, 0o600)
+            print("[✓] API key saved successfully.")
+        except Exception as e:
+            print(f"[x] An error occured. please try again. {str(e)}")
 
     def load_api_key(self) -> str|None:
         if not os.path.exists(self.config_path):

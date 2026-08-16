@@ -81,8 +81,12 @@ source "$VENV_DIR/venv/bin/activate" || {
 
 if [ -f "$VENV_DIR/requirements.txt" ]; then
     echo "📦 Installing Python dependencies..."
-    pip install --upgrade pip setuptools wheel
-    pip install -r "$VENV_DIR/requirements.txt"
+    python3 -m pip install --upgrade pip setuptools wheel
+    if ! python3 -m pip install -r "$VENV_DIR/requirements.txt"; then
+        echo "❌ Failed to install Python dependencies."
+        exit 1
+    fi
+    echo "✅ Python dependencies installed."
 else
     echo "⚠ No requirements.txt found, skipping dependency installation."
 fi
