@@ -8,7 +8,7 @@ from data.api_constants import FileAnalysis as fa, Response as res
 
 console = Console()
 
-def print_file_details(data, behaviour_data=None, json_output=False):
+def print_file_details(data: dict, behaviour_data: dict|None=None, json_output: bool=False, show_all: bool=False):
     try:
         if json_output:
             console.print_json(json.dumps(data))
@@ -150,7 +150,7 @@ def print_file_details(data, behaviour_data=None, json_output=False):
             # --- file behaviour if any ---
             if behaviour_data:
                 console.print()   # spacing
-                print_file_behaviour(behaviour_data)
+                print_file_behaviour(data=behaviour_data, json_output=json_output, show_all=show_all)
 
 
             return

@@ -1,11 +1,17 @@
+# Version 1.4.3
+---
+- Update the update handler. Now it throws error if the request fails using `resp.raise_for_status()`
+- Added `--all` parameter on `vt file report`
+- Modified install script (install.sh) to exit if no python environment is detected
+
+# Earlier versions
+
 # Version 1.4.2
 ---
 - Bug Fixes
 - Changed installer script
 - added secure api key management (Linux only, windows coming after 20th august)
 - removed argparse from requirements.txt
-
-# Earlier versions
 
 # Version 1.4.1
 ---

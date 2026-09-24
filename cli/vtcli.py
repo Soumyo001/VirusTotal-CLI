@@ -69,6 +69,7 @@ class VTCLI:
         file_report = file_sub.add_parser("report", help="Get a file report by hash")
         file_report.add_argument("hash", help="file hash (MD5/SHA256)")
         file_report.add_argument("--json", action="store_true")
+        file_report.add_argument("--all", action="store_true", help="Use this to get all data (No trauncates)")
 
         # request file rescan
         file_rescan = file_sub.add_parser("rescan", help="Request a file rescan by it's hash")
@@ -211,7 +212,7 @@ class VTCLI:
             if args.action == "scan":
                 # print(f"file scan command: {args.path} {args.json}")
                 response = vt.scan_file(args.path)
-                print_file_details(response, args.json)
+                print_file_details(data=response, json_output=args.json)
             elif args.action == "hash":
                 hashes = compute_hashes(args.path)
                 print(f"SHA-256: {hashes["SHA256"]}\nMD5: {hashes["MD5"]}\nSHA-1: {hashes["SHA1"]}")
@@ -219,14 +220,14 @@ class VTCLI:
                 # print(f"file scan report: {args.hash} {args.json}")
                 response = vt.get_file_report(args.hash)
                 response2 = vt.get_file_behaviour(args.hash)
-                print_file_details(data=response, behaviour_data=response2, json_output=args.json)
+                print_file_details(data=response, behaviour_data=response2, json_output=args.json, show_all=args.all)
             elif args.action == "rescan":
                 # print(f"file rescan: {args.hash} {args.json}")
                 response = vt.request_file_rescan(args.hash)
-                print_file_details(response, args.json)
+                print_file_details(data=response, json_output=args.json)
             elif args.action == "trace":
                 response = vt.get_file_behaviour(args.hash)
-                print_file_behaviour(response, json_output=args.json, show_all=args.all)
+                print_file_behaviour(data=response, json_output=args.json, show_all=args.all)
 
         elif args.command == "url":
             if args.action == "scan":

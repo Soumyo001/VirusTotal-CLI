@@ -22,6 +22,7 @@ class UpdateHandler:
     def check_for_updates(self, display_update_message=False):
         try:
             resp = requests.get(VERSION_LINK, timeout=3)
+            resp.raise_for_status()
             latest_version = resp.text.strip()
             latest = self._parse_version(latest_version)
             current = self._parse_version(self.current_version)

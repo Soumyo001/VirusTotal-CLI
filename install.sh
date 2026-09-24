@@ -67,7 +67,7 @@ fi
 
 if [ ! -d "$VENV_DIR/venv" ]; then
     echo "🧱 Creating Python virtual environment..."
-    python3 -m venv "$VENV_DIR/venv" 2>/dev/null || python -m venv "$VENV_DIR/venv"
+    python3 -m venv "$VENV_DIR/venv" 2>/dev/null || python -m venv "$VENV_DIR/venv" || exit 1
 else
     echo "Virtual environment already exists at $VENV_DIR"
 fi
