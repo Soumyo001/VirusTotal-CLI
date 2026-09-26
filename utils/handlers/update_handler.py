@@ -17,7 +17,10 @@ class UpdateHandler:
         self.changelog_file = os.path.join(self.project_root, "data/CHANGELOG.txt")
     
     def _parse_version(self, v):
-        return tuple(map(int, (v.split("."))))
+        try:
+            return tuple(map(int, (v.split("."))))
+        except (ValueError, AttributeError):
+            return None
 
     def check_for_updates(self, display_update_message=False):
         try:
@@ -26,6 +29,9 @@ class UpdateHandler:
             latest_version = resp.text.strip()
             latest = self._parse_version(latest_version)
             current = self._parse_version(self.current_version)
+            if latest is None or current is None:
+                print("[!] Could not parse version information")
+                return None
 
             if latest > current:
                 if display_update_message:

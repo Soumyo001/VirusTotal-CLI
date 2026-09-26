@@ -3,7 +3,7 @@ import os, platform
 def get_home_dir():
 
     if platform.system() == "Windows":
-        return os.environ.get("USERPROFILE")
+        return os.environ.get("USERPROFILE") or os.path.expanduser("~")
 
     sudo_user = os.environ.get("SUDO_USER")
     if sudo_user:

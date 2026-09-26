@@ -60,8 +60,18 @@ else
     cd "$VENV_DIR"
     echo "✅ Files copied successfully."
 
-    echo "🧹 Cleaning up old project directory..."
-    rm -rf "$PROJECT_DIR"
+    printf "🧹 Remove the original clone at %s? [Y/n] " "$PROJECT_DIR"
+    read -r REPLY
+    REPLY="$(printf '%s' "$REPLY" | tr -d '[:space:]')"
+    case "$REPLY" in
+        ""|[Yy]|[Yy][Ee][Ss])
+            rm -rf "$PROJECT_DIR"
+            echo "✅ Removed $PROJECT_DIR."
+            ;;
+        *)
+            echo "⚠️ Keeping $PROJECT_DIR. You can delete it yourself later."
+            ;;
+    esac
 fi
 
 

@@ -1,10 +1,48 @@
+# Version 1.4.4
+---
+- Fixed uninstall crash on Linux
+    - `vt --uninstall` failed with `ModuleNotFoundError: No module named 'rich._emoji_codes'`
+    - Cause: rich imports some submodules lazily at render time, but the venv containing rich was already deleted before the summary was printed
+    - Added `_warm_up_rich()` which renders every rich component into a throwaway buffer before deletion begins, forcing those imports into memory
+- Added root permission check before uninstalling
+    - Detects when `/usr/local/bin/vt` cannot be removed without elevation
+    - Warns and offers to cancel instead of silently leaving a broken `vt` command.
+    - Added a Linux line to the manual removal instructions panel
+    - Note: uninstalling without `sudo` leaves the `vt` shim in /usr/local/bin for manual removal
+- Safer installers
+    - `install.sh` opies to `~/.vtcli` and prompts before removing the original clone
+    - `install.ps1` prompts before removing the emptied source directory
+    - Fixed `install.ps1` printing an empty path (used undefined `$PROJECT_DIR` instead of `$DIR_PATH`)
+- install.ps1 hardening
+    - Added `Set-StrictMode -Version Latest` and `$ErrorActionPreference = 'Stop'`
+    - Added `$LASTEXITCODE` checks after venv creation and dependency installation. native commands never threw, so the existing try/catch blocks could not detect failure
+    - `pip install -r` now uses an absolute path. the previous relative path only resolved when the script happened to have changed directory first, so re-installs could fail
+    - Verify the venv interpreter exists before using it
+    - Create the WindowsApps directory if missing, and report failure if the `vt` shim cannot be written
+    - Removal now verified with `Test-Path` instead of reporting success unconditionally
+- install.sh
+    - Removal prompt defaults to yes on Enter and only accepts y/Y/yes as confirmation
+- Fixed Python 3.11 and earlier compatibility
+    - `vt file hash` used nested double quotes inside an f-string, which is a Python 3.12+ feature and raised `SyntaxError` on Debian 12 / Ubuntu 22.04
+- Update handler hardening
+    - `_parse_version()` no longer crashes on malformed or non-numeric version strings. returns `None` and the caller reports a clean message
+    - Removed a duplicated `rich.console` import
+- Help menu
+    - `HELP_MENU` was defined but never used. now wired into argparse as the parser epilog with `RawDescriptionHelpFormatter`
+    - Restructured to production CLI conventions (sections, aligned columns, examples)
+    - Fixed incorrect syntax: `vt analysis <ID>` is actually `vt analysis {file|url|domain|ip} <ID>`
+    - Documented `vt ip resolve`, `--self`, `--ipv6`, `--all`, `--headers`, `--engines`
+- Path resolution fallbacks
+    - `get_home_dir()` falls back to `expanduser("~")` if `USERPROFILE` fails
+    - `APPDATA` falls back to a constructed path if unset
+
+# Earlier versions
+
 # Version 1.4.3
 ---
 - Update the update handler. Now it throws error if the request fails using `resp.raise_for_status()`
 - Added `--all` parameter on `vt file report`
 - Modified install script (install.sh) to exit if no python environment is detected
-
-# Earlier versions
 
 # Version 1.4.2
 ---

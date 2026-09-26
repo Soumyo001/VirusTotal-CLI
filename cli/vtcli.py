@@ -1,6 +1,6 @@
 import argparse, sys, os
 from data.api_constants import Paths as p
-from data.constants import BANNER
+from data.constants import BANNER, HELP_MENU
 from cli import __version__
 from utils.handlers.update_handler import UpdateHandler 
 from utils.handlers.uninstall_handler import UninstallHandler
@@ -29,7 +29,9 @@ class VTCLI:
     def _setup_cli(self):
         parser = argparse.ArgumentParser(
             prog='vt',
-            description="VirusTotal CLI Tool — Access VirusTotal API from terminal"
+            description="VirusTotal CLI Tool — Access VirusTotal API from terminal",
+            epilog=HELP_MENU,
+            formatter_class=argparse.RawDescriptionHelpFormatter
         )
         parser.add_argument("-v", "--version", action="version", version=f"VirusTotal-CLI {__version__}")
         subparsers = parser.add_subparsers(dest="command", help="Main command categories")
@@ -215,7 +217,7 @@ class VTCLI:
                 print_file_details(data=response, json_output=args.json)
             elif args.action == "hash":
                 hashes = compute_hashes(args.path)
-                print(f"SHA-256: {hashes["SHA256"]}\nMD5: {hashes["MD5"]}\nSHA-1: {hashes["SHA1"]}")
+                print(f"SHA-256: {hashes['SHA256']}\nMD5: {hashes['MD5']}\nSHA-1: {hashes['SHA1']}")
             elif args.action == "report":
                 # print(f"file scan report: {args.hash} {args.json}")
                 response = vt.get_file_report(args.hash)

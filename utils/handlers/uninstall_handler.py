@@ -1,4 +1,4 @@
-import os, shutil, platform
+import os, shutil, platform, io
 from data.api_constants import Paths
 from rich.console import Console
 from rich.panel import Panel
@@ -14,8 +14,49 @@ class UninstallHandler:
         self._venv_dir = Paths.VENV_DIR
         self._failures = []
 
+    def _shim_needs_root(self):
+        if platform.system() == "Windows":
+            return False
+        if not os.path.exists(self._shim_path):
+            return False
+        return not os.access(os.path.dirname(self._shim_path), os.W_OK | os.X_OK)
+
+    def _warm_up_rich(self):
+        try:
+            warm = Console(file=io.StringIO(), force_terminal=True, width=100)
+            warm.print(
+                Panel.fit(
+                    "[bold green]warm :white_check_mark:[/bold green]",
+                    title="[bold green]Success[/bold green]",
+                    border_style="green",
+                )
+            )
+            t = Table(title="warm", show_header=True, header_style="bold red", border_style="bright_red")
+            t.add_column("Component", style="yellow", no_wrap=True)
+            t.add_column("Path", style="cyan")
+            t.add_column("Error", style="red")
+            t.add_row("[bold yellow]a[/bold yellow]", "[cyan]b[/cyan]", "[red]c :warning:[/red]")
+            warm.print(t)
+            txt = Text()
+            txt.append("• warm\n", style="bright_white")
+            warm.print(Panel(txt, title="[bold yellow]warm[/bold yellow]", border_style="yellow"))
+        except Exception:
+            pass
+    
     def uninstall(self):
+        if self._shim_needs_root():
+            print(f"[!] The global command '{self._shim_path}' is root-owned.")
+            print("    Without elevation it cannot be removed, so 'vt' would stay")
+            print("    on your system even after everything else is deleted.")
+            print("\n    Recommended: cancel and re-run as:  sudo vt --uninstall")
+            answer = input("\n    Continue with a partial uninstall anyway? [y/N]: ").strip().lower()
+            if answer not in ("y", "yes"):
+                print("[*] Uninstall cancelled. Nothing was removed.")
+                return
+
         print("[*] Uninstalling VirusTotal-CLI...")
+        self._warm_up_rich()
+
         if os.path.exists(self._config_path):
             try:
                 shutil.rmtree(self._config_path, ignore_errors=False)
@@ -90,6 +131,7 @@ class UninstallHandler:
 
         instructions.append("• Close all terminals or apps using those files.\n", style="bright_white")
         instructions.append("• On Windows: run the uninstall as Administrator.\n", style="bright_white")
+        instructions.append("• On Linux: re-run with sudo (the 'vt' command lives in /usr/local/bin).\n", style="bright_white")
         instructions.append("• If deletion still fails: restart your system.\n", style="bright_white")
 
         console.print(

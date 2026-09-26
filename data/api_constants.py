@@ -5,7 +5,7 @@ class Paths:
     _HOME = get_home_dir()
 
     if platform.system() == "Windows":
-        _APPDATA = os.environ.get("APPDATA")
+        _APPDATA = os.environ.get("APPDATA") or os.path.join(_HOME, "AppData", "Roaming")
         SHIM_PATH = os.path.join(_HOME, "AppData", "Local", "Microsoft", "WindowsApps", "vt.cmd")
         CONFIG_PATH = os.path.join(_APPDATA, "vtcli", "config.json")
         LAST_SEEN_FILE = os.path.join(_APPDATA, "vtcli", "last_seen.json")
