@@ -1,3 +1,13 @@
+# Version 1.4.5
+---
+- Added admin check for windows using `ctypes.windll.shell32.IsUserAnAdmin() == 0`
+- Safer installers
+    - `install.ps1` now copies the source directory files instead of moving.
+    - Guarded `$DIR_PATH` with curly braces cause of the variable parsing error.
+- Added safety check for checking python dependency using `python --version *> $null`
+
+# Earlier versions
+
 # Version 1.4.4
 ---
 - Fixed uninstall crash on Linux
@@ -35,8 +45,6 @@
 - Path resolution fallbacks
     - `get_home_dir()` falls back to `expanduser("~")` if `USERPROFILE` fails
     - `APPDATA` falls back to a constructed path if unset
-
-# Earlier versions
 
 # Version 1.4.3
 ---

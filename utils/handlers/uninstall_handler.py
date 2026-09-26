@@ -14,9 +14,12 @@ class UninstallHandler:
         self._venv_dir = Paths.VENV_DIR
         self._failures = []
 
-    def _shim_needs_root(self):
+    def _needs_elevation(self):
         if platform.system() == "Windows":
-            return False
+            try:
+                import ctypes
+                return ctypes.windll.shell32.IsUserAnAdmin() == 0
+            except: return False
         if not os.path.exists(self._shim_path):
             return False
         return not os.access(os.path.dirname(self._shim_path), os.W_OK | os.X_OK)
@@ -44,11 +47,18 @@ class UninstallHandler:
             pass
     
     def uninstall(self):
-        if self._shim_needs_root():
-            print(f"[!] The global command '{self._shim_path}' is root-owned.")
-            print("    Without elevation it cannot be removed, so 'vt' would stay")
-            print("    on your system even after everything else is deleted.")
-            print("\n    Recommended: cancel and re-run as:  sudo vt --uninstall")
+        if self._needs_elevation():
+            if platform.system() == "Windows":
+                print("[!] Not running as Administrator.")
+                print("    Some files may not be removable, leaving 'vt' on your system.")
+                print("\n    Recommended: cancel, then re-run from an Administrator")
+                print("    PowerShell or Command Prompt:  vt --uninstall")
+            else:
+                print(f"[!] The global command '{self._shim_path}' is root-owned.")
+                print("    Without elevation it cannot be removed, so 'vt' would stay")
+                print("    on your system even after everything else is deleted.")
+                print("\n    Recommended: cancel and re-run as:  sudo /usr/local/bin/vt --uninstall")
+            
             answer = input("\n    Continue with a partial uninstall anyway? [y/N]: ").strip().lower()
             if answer not in ("y", "yes"):
                 print("[*] Uninstall cancelled. Nothing was removed.")

@@ -12,8 +12,14 @@ if (-not (Test-Path -Path $VENV_DIR -PathType Container)) {
 
 
 Write-Host "[*] Checking Python installation..." -ForegroundColor Cyan
-
-if(-not (Get-Command python -ErrorAction SilentlyContinue)){
+$pythonFound = $false
+if(Get-Command python -ErrorAction SilentlyContinue){
+    try {
+        python --version *> $null
+        if($LASTEXITCODE -eq 0) { $pythonFound = $true }
+    } catch { $pythonFound = $false }
+}
+if(-not($pythonFound)) {
     Write-Host "[-] Python not found. Downloading Python..." -ForegroundColor Yellow
     Start-Process "https://www.python.org/downloads/windows/" -Wait
     Write-Host "Please install Python manually, Add python.exe to PATH, then re-run this script." -ForegroundColor Yellow
@@ -29,13 +35,13 @@ if( $DIR_PATH -ne $VENV_DIR ){
         Write-Host "[-] $DIR_PATH does not look like a VirusTotal-CLI clone. Aborting." -ForegroundColor Red
         exit 1
     }
-    Write-Host "[*] Moving project files to $VENV_DIR..." -ForegroundColor Cyan
-    Get-ChildItem -Path $DIR_PATH -Force | Move-Item -Destination $VENV_DIR -Force
+    Write-Host "[*] Copying project files to $VENV_DIR..." -ForegroundColor Cyan
+    Copy-Item -Path "$DIR_PATH\*" -Destination $VENV_DIR -Recurse -Force
     Set-Location -Path $VENV_DIR
     Write-Host "[+] Files copied successfully." -ForegroundColor Green
 
     Write-Host "[*] Cleaning up old project directory..."
-    $answer = Read-Host "[?] Remove the original clone at $DIR_PATH? (y/N)"
+    $answer = Read-Host "[?] Remove the original clone at ${DIR_PATH}? (Y/n)"
     if( [string]::IsNullOrWhiteSpace($answer) -or $answer.Trim() -match '^(y|yes)$' ){
         Remove-Item -Path $DIR_PATH -Force -Recurse -ErrorAction SilentlyContinue
         if(Test-Path -Path $DIR_PATH -PathType Container) {
